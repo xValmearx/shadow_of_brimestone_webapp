@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% if  user.is_authenticated%}
+<h1>you are logged in</h1>
+{% endif %}
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+  <h2>Log In</h2>
+  <form method = "POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type = 'submit'>Log In</button>
+  </form>
+
+
+  <h3><a href = "{%url "signup"%}">Register Here</a></h3>
+{% endblock content %}
