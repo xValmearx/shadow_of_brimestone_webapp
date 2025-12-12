@@ -1,6 +1,12 @@
+{% load static %}
+
+
 <!Doctype html>
 <html>
   <head>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
     <meta charset = "utf-8">
     <title>
     
@@ -9,11 +15,25 @@
       {% endblock title %}
     </title>
   </head>
+  <header>
+
+    {% if user.is_authenticated %}
+      <nav-bar logout-url="{% url 'logout' %}" csrf-token="{{ csrf_token }}"></nav-bar>
+
+    {% endif %}
+  </header>
   <body>
     <main>
+
+    
+    
       {% block content %}
       Stuff Goes Here
       {% endblock content %}
     </main>
+
+
+    <!-- JS files here -->
+    <script src="{% static 'js/base.js' %}"></script>
   </body>
 </html>
