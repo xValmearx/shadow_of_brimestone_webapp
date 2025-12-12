@@ -8,14 +8,14 @@
 
 /* Custom varibles to keep website consistant  */
 :root{
-  --main-color: #ffffff;
+  --main-color: #c7b47c;
   --secondary-color:#1A4A5A;
   --thrid-color:#bfe79e;
   --light-blue:#58bff7;
   --dark-blue:#0E2C40;
   --side-margin:20vw;
 
-  --background-color: rgb(199, 226, 231);
+  --background-color: #d5c186;
 
   --large-card-margin:3%;
 
@@ -57,7 +57,7 @@ body::-webkit-scrollbar {
     position: fixed;
     background-color: var(--main-color);
 
-    border-bottom: 2px solid rgb(231, 229, 229);
+    border-bottom: 2px solid #bba974;
     border-radius: 5px;
     
 }
