@@ -9,9 +9,11 @@
 <ul>
     {% for character in characters %}
         <li>
-            {{character.character_class}}
-            {{character.agility}}
-            {{character.lore}}
+        <large-card 
+            h1 = {{character.character_class}}
+            character-url="{% url 'character_detail' character.pk %}">
+            >
+        </large-card>
         </li>
     {% empty %}
         <li>No characters yet.</li>

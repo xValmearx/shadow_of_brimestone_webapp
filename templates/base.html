@@ -18,15 +18,16 @@
   <header>
 
     {% if user.is_authenticated %}
-      <nav-bar logout-url="{% url 'logout' %}" csrf-token="{{ csrf_token }}"></nav-bar>
+      <nav-bar
+      logout-url="{% url 'logout' %}" 
+      csrf-token="{{ csrf_token }}"
+      character_list_url = "{% url 'character_list' %}"
+      ></nav-bar>
 
     {% endif %}
   </header>
   <body>
     <main>
-
-    
-    
       {% block content %}
       Stuff Goes Here
       {% endblock content %}

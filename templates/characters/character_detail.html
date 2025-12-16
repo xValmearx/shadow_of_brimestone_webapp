@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Page container has two sides, left and right -->
+<div class = 'page-container'>
+
+    <!-- left page components -->
+    <div class = 'left-container'>
+
+        <!-- Stat Wrapper -->
+        <div class="stats-wrapper">
+
+            <!-- Div for background color of all player attributes -->
+            <div style="background-color: rgb(139, 94, 26); border-radius: 5px;">
+
+                <!-- Div containing the first 3 attributes -->
+                <div class="stat_container">
+
+                    <!-- Agility -->
+                    <div class="character_stat">
+                        <h1>Agility</h1>
+                        <h1>{{ character.agility }}</h1>
+                    </div>
+                    <!-- Cunning -->
+                    <div class="character_stat">
+                        <h1>Cunning</h1>
+                        <h1>{{ character.cunning }}</h1>
+                    </div>
+
+                    <!-- Spirit -->
+                    <div class="character_stat">
+                        <h1>Spirit</h1>
+                        <h1>{{ character.spirit }}</h1>
+                    </div>
+                </div>
+
+                <!-- second container -->
+                <div class="stat_container">
+
+                    <!-- Strength -->
+                    <div class="character_stat">
+                        <h1>Strength</h1>
+                        <h1>{{ character.strength }}</h1>
+                    </div>
+
+                    <!-- Lore -->
+                    <div class="character_stat">
+                        <h1>Lore</h1>
+                        <h1>{{ character.lore }}</h1>
+                    </div>
+
+                    <!-- Luck -->
+                    <div class="character_stat">
+                        <h1>Luck</h1>
+                        <h1>{{ character.luck }}</h1>
+                    </div>
+                </div> <!-- stat container-->
+            </div> <!-- background color div-->
+        </div> <!-- end of stats -->
+
+
+        <div class="stats-wrapper">
+            <div class = 'combat_container' style="background-color: rgb(91, 32, 15);">
+
+
+                <div class = 'character_stat'>
+                    <h1>Grit</h1>
+                    <h1>{{character.max_grit}} / {{character.grit}}</h1>
+                    <div>
+                        <button>+</button>
+                        <button>-</button>
+                    </div>         
+                </div>
+
+
+                <div class = 'character_stat'>
+                    <h1>Range</h1>
+                    <h1>{{character.range}}+</h1>
+                </div>
+                <div class = 'character_stat'>
+                    <h1>Melee</h1>
+                    <h1>{{character.melee}}+</h1>
+                    <h3>Combat: {{character.combat}}</h3>
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Initiative</h1>
+                    <h1>{{character.initiative}}</h1>
+                </div>
+
+
+            </div>
+        </div> <!-- end of combat -->
+
+        <div class = 'stats-wrapper'>
+            <div class = 'stat_container' style="background-color: rgb(132, 19, 19);">
+                <div class = 'character_stat'>
+                    <h1>Health</h1>
+                    <h1>{{character.health}} / {{character.max_health}}</h1>
+                    <div>
+                        <button>+</button>
+                        <button>-</button>
+                    </div>  
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Defense</h1>
+                    <h1>{{character.defense}}+</h1>
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Armor</h1>
+                    <h1>{{character.armor}}</h1>
+                </div>
+            </div>
+        </div> <!-- end of health -->
+
+        <div class = 'stats-wrapper'>
+            <div class = 'stat_container' style="background-color: rgb(23, 30, 130);">
+                <div class = 'character_stat'>
+                    <h1>Sanity</h1>
+                    <h1>{{character.sanity}} / {{character.max_sanity}}</h1>
+                    <div>
+                        <button>+</button>
+                        <button>-</button>
+                    </div>  
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Will Power</h1>
+                    <h1>{{character.will_power}}+</h1>
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Spirit Armor</h1>
+                    <h1>{{character.spirit_armor}}</h1>
+                </div>
+            </div>
+        </div> <!-- end sanity -->
+
+        <div class = 'stats-wrapper'> 
+            <div class = 'horror_container'>
+                <div class = 'character_stat'>
+                    <h1>Horror</h1>
+                    <h1>{{character.horror}} / {{character.max_horror}}</h1>
+                    <div>
+                        <button>+</button>
+                        <button>-</button>
+                    </div>  
+                </div>
+
+                <div class = 'character_stat'>
+                    <h1>Corruption Resistance</h1>
+                    <h1>{{character.corruption_resistance}}</h1>
+
+                </div>
+            </div> <!-- End of Horror -->
+        </div>
+        
+    </div> <!-- end of left page -->
+
+    <div class = 'right-container'>
+
+    </div>
+</div> <!-- page-container -->
+
+{% endblock content %}

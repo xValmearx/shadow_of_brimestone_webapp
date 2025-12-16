@@ -122,7 +122,7 @@ CLASS_DEFAULT_STATS = {
 
 class CharacterSheet(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # This works with custom users
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE
     )
 

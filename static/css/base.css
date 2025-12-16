@@ -9,7 +9,7 @@
 /* Custom varibles to keep website consistant  */
 :root{
   --main-color: #c7b47c;
-  --secondary-color:#1A4A5A;
+  --secondary-color:#9b8952;
   --thrid-color:#bfe79e;
   --light-blue:#58bff7;
   --dark-blue:#0E2C40;
@@ -111,3 +111,124 @@ body::-webkit-scrollbar {
     width: 100%;
 }
 /* Navbar Code End --------------------------------------------------------- */
+
+
+
+
+
+/* Info card --------------------------------------------------------- */
+ .large_card{
+  background-color: white;
+  box-shadow: 8px 8px 8px rgba(0,0,0,0.3);
+
+  margin-left: var(--side-margin);
+  margin-right: var(--side-margin);
+
+  margin-bottom: 20px;
+
+  padding: 20px;
+ }
+
+ .large_card img{
+
+  width: 100%;
+  max-width: 600px;
+
+  display: block;
+  margin: 0 auto;
+}
+
+
+ .large_card h1{
+
+  margin-left: var(--large-card-margin);
+  margin-right: var(--large-card-margin);
+ }
+
+.large_card p{
+  margin-left: var(--large-card-margin);
+  margin-right: var(--large-card-margin);
+}
+
+
+/* left and right page container */
+.page-container {
+  display: flex;
+}
+
+.left-container{
+  width: 50%; /* each takes half the screen */
+  margin-left: 20px;
+  margin-right: 10px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 40px;
+
+  background-color: var(--secondary-color);
+}
+
+
+.right-container {
+  width: 50%; /* each takes half the screen */
+  margin-left: 10px;
+  margin-right: 20px;
+  padding: 40px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  background-color: var(--secondary-color);
+}
+
+
+.stats-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* keeps both columns aligned */
+    padding: 10px;
+}
+
+
+/*for character stats like agility cunning etc*/
+.stat_container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/*for character combat stats like range melee etc*/
+.combat_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* for character horror stats */
+.horror_container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+
+    background-color: #351065;
+
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.character_stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Remove default h1 margins */
+.character_stat h1 {
+    margin: 0;
+}

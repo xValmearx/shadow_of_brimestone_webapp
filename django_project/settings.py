@@ -134,7 +134,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 
 # logged in setting
-LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = "character_list"
 LOGOUT_REDIRECT_URL = "login"
 
 # set default login url
