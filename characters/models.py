@@ -190,11 +190,17 @@ class CharacterSheet(models.Model):
 
     # helper method to cycle abilities
     def cycle_ability(self):
+
+        # make a list of all abilities orderd by ID
         abilities = list(self.abilities.all().order_by('id'))
+
+        # if there are no abilities, set them to none
         if not abilities:
             self.current_ability = None
+
         elif self.current_ability not in abilities:
             self.current_ability = abilities[0]
+            
         else:
             idx = abilities.index(self.current_ability)
             self.current_ability = abilities[(idx + 1) % len(abilities)]

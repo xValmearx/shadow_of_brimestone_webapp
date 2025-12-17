@@ -178,6 +178,10 @@ body::-webkit-scrollbar {
   margin-top: 20px;
   margin-bottom: 20px;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   background-color: var(--secondary-color);
 }
 
@@ -232,3 +236,29 @@ body::-webkit-scrollbar {
 .character_stat h1 {
     margin: 0;
 }
+
+
+/* class ability Card */
+.ability_card{
+    height: 500px;
+    width: 400px;
+
+    background-color: rgb(202, 178, 74);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+
+    padding: 20px;
+
+    border: 5px solid black;
+    border-radius: 5px;
+
+}
+
+.ability_card h1{
+    background-color: rgb(39, 123, 57);
+    border-top: solid black;
+    border-bottom: solid black;
+
+    text-align: center;
+}
+
+/* class ability Card */

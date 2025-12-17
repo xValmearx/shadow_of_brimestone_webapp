@@ -64,7 +64,6 @@
             </div> <!-- background color div-->
         </div> <!-- end of stats -->
 
-
         <div class="stats-wrapper">
             <div class = 'combat_container' style="background-color: rgb(91, 32, 15);">
 
@@ -161,15 +160,19 @@
 
                 </div>
             </div> <!-- End of Horror -->
-        </div>
+        </div><!-- End of horror -->
         
     </div> <!-- end of left page -->
 
     <div class = 'right-container'>
 
-        <h1 id="CurrentAbilityName">{{ character.current_ability.name }}</h1>
-        <p id="CurrentAbilityDescription">{{ character.current_ability.description }}</p>
-
+        <div class = 'ability_card'>
+            <h1 id="CurrentAbilityName">{{ character.current_ability.name }}</h1>
+            <div class = 'ability_card_container'>
+                <p id="CurrentAbilityDescription">{{ character.current_ability.description }}</p>
+            </div>
+        </div>
+        <br>
         <button id="CycleAbilityBtn">Next Ability</button>
         
     </div>
@@ -188,14 +191,13 @@ const currentURL = window.location.href;
 
 // Get DOM elements
 const cycleBtn = document.getElementById('CycleAbilityBtn');
-const abilityNameEl = document.getElementById('CurrentAbilityName');
-const abilityDescEl = document.getElementById('CurrentAbilityDescription');
 
 
 
 // Utility function to send and receive data from backend
 async function fetchData(url, dataDict) {
     try {
+        // convert the dataDict into something the 
         const formBody = new URLSearchParams(dataDict).toString();
 
         const response = await fetch(url, {
@@ -224,9 +226,15 @@ async function fetchData(url, dataDict) {
 cycleBtn.addEventListener('click', async function() {
     cycleBtn.disabled = true;
 
+    // elements that will be updated
+    const abilityNameEl = document.getElementById('CurrentAbilityName');
+    const abilityDescEl = document.getElementById('CurrentAbilityDescription');
+
     try {
+        // send data into the back end and get the response
         const data = await fetchData(currentURL, { action: 'cycle_ability' });
 
+        // if there is a valid response
         if (data.new_ability_name) {
             abilityNameEl.textContent = data.new_ability_name;
             abilityDescEl.textContent = data.new_ability_description;
@@ -241,8 +249,6 @@ cycleBtn.addEventListener('click', async function() {
         cycleBtn.disabled = false;
     }
 });
-
-
 
 
 </script>

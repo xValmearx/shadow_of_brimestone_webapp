@@ -108,6 +108,11 @@ class CharacterDetailView(DetailView):
         action = request.POST.get("action")
 
         if action == "cycle_ability":
+
+
+            # the characters has a method to cycle to a new ability and return the new ability data
+            # this cycle abiltiy also saves the ability state in the database as well
+            # so if they user logges back in, current select ability will still be there
             new_ability = self.object.cycle_ability()
             
             # Handle case where there are no abilities
@@ -119,6 +124,8 @@ class CharacterDetailView(DetailView):
                     "new_ability_description": "No abilities available"
                 })
             
+            # the new ability also stores data about the new current select ability
+            # the program returs this data to the front end to change the html
             return JsonResponse({
                 "type": "cycle_ability",
                 "new_ability_id": new_ability.id,
