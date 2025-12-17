@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 
 
 from .forms import CharacterCreateForm
@@ -56,6 +57,16 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
             **stats
         )
 
+        # Example: Marshall abilities
+        if char_class == 'marshall':
+            from .models import Ability
+            abilities = Ability.objects.filter(name__in=[
+                "Hardened Resolve", "Rolling Thunder", "Cleaning Up The West"
+            ])
+            self.character.abilities.set(abilities)
+            self.character.current_ability = abilities.first()
+            self.character.save()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -77,4 +88,43 @@ class CharacterDetailView(DetailView):
     model = CharacterSheet
     template_name = "characters/character_detail.html"
     context_object_name = 'character'
-    
+
+
+    def post(self, request, *args, **kwargs):
+        """
+        Central POST manager for all character actions.
+        Detects the action type and executes the corresponding method.
+        """
+        self.object = self.get_object()
+
+        # Check authentication
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "Not authenticated"}, status=403)
+
+        # Check ownership
+        if self.object.user != request.user:
+            return JsonResponse({"error": "Not authorized"}, status=403)
+
+        action = request.POST.get("action")
+
+        if action == "cycle_ability":
+            new_ability = self.object.cycle_ability()
+            
+            # Handle case where there are no abilities
+            if new_ability is None:
+                return JsonResponse({
+                    "type": "cycle_ability",
+                    "new_ability_id": None,
+                    "new_ability_name": None,
+                    "new_ability_description": "No abilities available"
+                })
+            
+            return JsonResponse({
+                "type": "cycle_ability",
+                "new_ability_id": new_ability.id,
+                "new_ability_name": new_ability.name,
+                "new_ability_description": new_ability.description
+            })
+        
+        # Handle unknown actions
+        return JsonResponse({"error": "Unknown action"}, status=400)

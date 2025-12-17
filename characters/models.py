@@ -120,11 +120,23 @@ CLASS_DEFAULT_STATS = {
         },
 }
 
+class Ability(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+
 class CharacterSheet(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE
     )
+
+    # character name
+    name = models.CharField(max_length=100, blank=True, default="Unnamed Hero")
 
     character_class = models.CharField(
         max_length=50,
@@ -163,6 +175,31 @@ class CharacterSheet(models.Model):
     max_horror = models.IntegerField(default=0)
     horror = models.IntegerField(default=0)
     corruption_resistance = models.IntegerField(default=0)
+
+
+    # abilities
+    abilities = models.ManyToManyField(Ability, blank=True)
+
+    current_ability = models.ForeignKey(
+        Ability,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='active_for_characters'
+    )
+
+    # helper method to cycle abilities
+    def cycle_ability(self):
+        abilities = list(self.abilities.all().order_by('id'))
+        if not abilities:
+            self.current_ability = None
+        elif self.current_ability not in abilities:
+            self.current_ability = abilities[0]
+        else:
+            idx = abilities.index(self.current_ability)
+            self.current_ability = abilities[(idx + 1) % len(abilities)]
+        self.save()
+        return self.current_ability
 
     def __str__(self):
         return f"{self.name} ({self.get_character_class_display()})"

@@ -3,6 +3,10 @@
 
 {% block content %}
 
+<div style="display:none;">
+  {% csrf_token %}
+</div>
+
 <!-- Page container has two sides, left and right -->
 <div class = 'page-container'>
 
@@ -163,7 +167,87 @@
 
     <div class = 'right-container'>
 
+        <h1 id="CurrentAbilityName">{{ character.current_ability.name }}</h1>
+        <p id="CurrentAbilityDescription">{{ character.current_ability.description }}</p>
+
+        <button id="CycleAbilityBtn">Next Ability</button>
+        
     </div>
 </div> <!-- page-container -->
 
+
+
+<script>
+// Get CSRF token from the hidden div
+function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+// Get the current URL (character detail page URL)
+const currentURL = window.location.href;
+
+// Get DOM elements
+const cycleBtn = document.getElementById('CycleAbilityBtn');
+const abilityNameEl = document.getElementById('CurrentAbilityName');
+const abilityDescEl = document.getElementById('CurrentAbilityDescription');
+
+
+
+// Utility function to send and receive data from backend
+async function fetchData(url, dataDict) {
+    try {
+        const formBody = new URLSearchParams(dataDict).toString();
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Something went wrong');
+        }
+
+        return data; // returns the backend's response as a dictionary
+    } catch (error) {
+        console.error('Error in fetchData:', error);
+        throw error; // propagate error to caller
+    }
+}
+
+
+cycleBtn.addEventListener('click', async function() {
+    cycleBtn.disabled = true;
+
+    try {
+        const data = await fetchData(currentURL, { action: 'cycle_ability' });
+
+        if (data.new_ability_name) {
+            abilityNameEl.textContent = data.new_ability_name;
+            abilityDescEl.textContent = data.new_ability_description;
+        } else {
+            abilityNameEl.textContent = 'No Abilities';
+            abilityDescEl.textContent = 'No abilities available';
+        }
+
+    } catch (error) {
+        alert('Failed to cycle ability: ' + error.message);
+    } finally {
+        cycleBtn.disabled = false;
+    }
+});
+
+
+
+
+</script>
+
 {% endblock content %}
+
+
+
