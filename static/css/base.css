@@ -254,11 +254,14 @@ body::-webkit-scrollbar {
 }
 
 .ability_card h1{
-    background-color: rgb(39, 123, 57);
     border-top: solid black;
     border-bottom: solid black;
 
     text-align: center;
+}
+
+.ability_card p{
+    font-size: 30px;
 }
 
 /* class ability Card */

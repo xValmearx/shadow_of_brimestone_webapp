@@ -101,10 +101,10 @@
             <div class = 'stat_container' style="background-color: rgb(132, 19, 19);">
                 <div class = 'character_stat'>
                     <h1>Health</h1>
-                    <h1>{{character.health}} / {{character.max_health}}</h1>
+                    <h1 id = 'health_stat'>{{character.health}} / {{character.max_health}}</h1>
                     <div>
-                        <button>+</button>
-                        <button>-</button>
+                        <button id = "health_add">+</button>
+                        <button id = "health_sub">-</button>
                     </div>  
                 </div>
 
@@ -167,8 +167,16 @@
     <div class = 'right-container'>
 
         <div class = 'ability_card'>
-            <h1 id="CurrentAbilityName">{{ character.current_ability.name }}</h1>
-            <div class = 'ability_card_container'>
+            <h1 style="background-color: rgb(184, 18, 18);">{{ character.class_ability.name }}</h1>
+            <div style=" height: 100%; display: flex; justify-content: center; align-items: center;">
+                <p>{{ character.class_ability.description }}</p>
+            </div>
+        </div>
+        <br>
+
+        <div class = 'ability_card'>
+            <h1 id="CurrentAbilityName" style="background-color: rgb(39, 123, 57);">{{ character.current_ability.name }}</h1>
+            <div style=" height: 100%; display: flex; justify-content: center; align-items: center; ;">
                 <p id="CurrentAbilityDescription">{{ character.current_ability.description }}</p>
             </div>
         </div>
@@ -189,8 +197,12 @@ function getCSRFToken() {
 // Get the current URL (character detail page URL)
 const currentURL = window.location.href;
 
-// Get DOM elements
+// DOM elements
 const cycleBtn = document.getElementById('CycleAbilityBtn');
+
+const health_add = document.getElementById('health_add')
+const health_sub = document.getElementById('health_sub')
+
 
 
 
@@ -224,8 +236,6 @@ async function fetchData(url, dataDict) {
 
 
 cycleBtn.addEventListener('click', async function() {
-    cycleBtn.disabled = true;
-
     // elements that will be updated
     const abilityNameEl = document.getElementById('CurrentAbilityName');
     const abilityDescEl = document.getElementById('CurrentAbilityDescription');
@@ -245,10 +255,28 @@ cycleBtn.addEventListener('click', async function() {
 
     } catch (error) {
         alert('Failed to cycle ability: ' + error.message);
-    } finally {
-        cycleBtn.disabled = false;
     }
 });
+
+
+health_add.addEventListener('click', () => update_health(1));
+health_sub.addEventListener('click', () => update_health(-1));
+
+
+async function update_health(num){
+    health_label = document.getElementById('health_stat')
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, { action: 'health', amount: num});
+
+        // if there is a valid response
+        if (data.health !== undefined) {
+            health_label.textContent = `${data.health} / ${data.max_health}`
+        } 
+    } catch (error) {
+        alert('Failed to cycle ability: ' + error.message);
+    }
+}
 
 
 </script>

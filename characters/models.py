@@ -120,12 +120,21 @@ CLASS_DEFAULT_STATS = {
         },
 }
 
+class ClassAbility(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
 class Ability(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
     def __str__(self):
         return self.name
+
 
 
 
@@ -176,6 +185,13 @@ class CharacterSheet(models.Model):
     horror = models.IntegerField(default=0)
     corruption_resistance = models.IntegerField(default=0)
 
+    class_ability = models.ForeignKey(
+        ClassAbility,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
 
     # abilities
     abilities = models.ManyToManyField(Ability, blank=True)
@@ -200,12 +216,21 @@ class CharacterSheet(models.Model):
 
         elif self.current_ability not in abilities:
             self.current_ability = abilities[0]
-            
+
         else:
             idx = abilities.index(self.current_ability)
             self.current_ability = abilities[(idx + 1) % len(abilities)]
         self.save()
         return self.current_ability
+
+    def update_health(self,amount):
+
+        if (self.health + amount) > self.max_health:
+            return
+        elif (self.health + amount) < 0:
+            return 
+        self.health += amount
+        self.save()
 
     def __str__(self):
         return f"{self.name} ({self.get_character_class_display()})"

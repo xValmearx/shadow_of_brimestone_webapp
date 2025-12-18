@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 
 
+from .models import Ability, ClassAbility
 from .forms import CharacterCreateForm
 from .models import CharacterSheet, CLASS_DEFAULT_STATS
 
@@ -59,12 +60,20 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
 
         # Example: Marshall abilities
         if char_class == 'marshall':
-            from .models import Ability
-            abilities = Ability.objects.filter(name__in=[
-                "Hardened Resolve", "Rolling Thunder", "Cleaning Up The West"
+
+            # get the set abilities for this character class
+            ability_set = Ability.objects.filter(name__in=[
+                "Hardend Resolve", "Rolling Thunder", "Cleaning Up The West"
             ])
-            self.character.abilities.set(abilities)
-            self.character.current_ability = abilities.first()
+
+            # set the filtered abilites
+            self.character.abilities.set(ability_set)
+
+            # set the current ability
+            self.character.current_ability = ability_set.first()
+
+            self.character.class_ability  = ClassAbility.objects.get(name__in=['Double Shot'])
+
             self.character.save()
 
         return super().form_valid(form)
@@ -127,11 +136,18 @@ class CharacterDetailView(DetailView):
             # the new ability also stores data about the new current select ability
             # the program returs this data to the front end to change the html
             return JsonResponse({
-                "type": "cycle_ability",
-                "new_ability_id": new_ability.id,
                 "new_ability_name": new_ability.name,
                 "new_ability_description": new_ability.description
             })
         
+        if action == 'health':
+            amount = int(request.POST.get('amount'))
+            self.object.update_health(amount)
+
+            return JsonResponse({
+                "health": self.object.health,
+                "max_health": self.object.max_health,
+            })
+            
         # Handle unknown actions
         return JsonResponse({"error": "Unknown action"}, status=400)
