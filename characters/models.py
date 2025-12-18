@@ -137,7 +137,6 @@ class Ability(models.Model):
 
 
 
-
 class CharacterSheet(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 

@@ -29,6 +29,8 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
         # get the cleaned character class data from user
         char_class = form.cleaned_data['character_class']
 
+        char_name = form.cleaned_data['character_name']
+
         # CLASS_DEFAULT_STATS has a BUNCH of info, it stores default classes and thier stats
         # marshall has a agility of 3, but gunslinger has agility of 6 for example
 
@@ -52,6 +54,7 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
         self.character = CharacterSheet.objects.create(
             user=self.request.user,
             character_class=char_class,
+            name = char_name,
 
             # this stats function then automatically takes all the key word skills 
             # and assigns them into the correct data fields

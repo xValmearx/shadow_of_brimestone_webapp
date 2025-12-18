@@ -15,17 +15,19 @@
       {% endblock title %}
     </title>
   </head>
-  <header>
 
-    {% if user.is_authenticated %}
+  <header>
+    {% block header %}
+      {% if user.is_authenticated %}
       <nav-bar
       logout-url="{% url 'logout' %}" 
       csrf-token="{{ csrf_token }}"
       character_list_url = "{% url 'character_list' %}"
       ></nav-bar>
-
-    {% endif %}
+      {% endif %}
+    {% endblock header %}
   </header>
+  
   <body>
     <main>
       {% block content %}

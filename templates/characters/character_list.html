@@ -9,8 +9,8 @@
 <ul>
     {% for character in characters %}
         <li>
-        <large-card 
-            h1 = {{character.character_class}}
+        <large-card
+            h1 = '{{character.name}} | {{character.character_class}}'
             character-url="{% url 'character_detail' character.pk %}">
             >
         </large-card>

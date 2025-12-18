@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 
+    {% block header %}
+      {% if user.is_authenticated %}
+      <nav-bar
+      logo = '{{character.name}}'
+      logout-url="{% url 'logout' %}" 
+      csrf-token="{{ csrf_token }}"
+      character_list_url = "{% url 'character_list' %}"
+      ></nav-bar>
+      {% endif %}
+    {% endblock header %}
+
 {% block content %}
 
 <div style="display:none;">
