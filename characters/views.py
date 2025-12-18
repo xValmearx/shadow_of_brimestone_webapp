@@ -148,6 +148,32 @@ class CharacterDetailView(DetailView):
                 "health": self.object.health,
                 "max_health": self.object.max_health,
             })
-            
+        
+        if action == 'sanity':
+            amount = int(request.POST.get('amount'))
+            self.object.update_sanity(amount)
+
+            return JsonResponse({
+                "sanity": self.object.sanity,
+                "max_sanity": self.object.max_sanity,
+            })
+        
+        if action == 'horror':
+            amount = int(request.POST.get('amount'))
+            self.object.update_horror(amount)
+
+            return JsonResponse({
+                "horror": self.object.horror,
+                "max_horror": self.object.max_horror,
+            })
+
+        if action == 'grit':
+            amount = int(request.POST.get('amount'))
+            self.object.update_grit(amount)
+
+            return JsonResponse({
+                "grit": self.object.grit,
+                "max_grit": self.object.max_grit,
+            })
         # Handle unknown actions
         return JsonResponse({"error": "Unknown action"}, status=400)

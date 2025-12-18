@@ -70,10 +70,10 @@
 
                 <div class = 'character_stat'>
                     <h1>Grit</h1>
-                    <h1>{{character.max_grit}} / {{character.grit}}</h1>
+                    <h1 id="grit_stat">{{character.max_grit}} / {{character.grit}}</h1>
                     <div>
-                        <button>+</button>
-                        <button>-</button>
+                        <button id="grit_add">+</button>
+                        <button id="grit_sub">-</button>
                     </div>         
                 </div>
 
@@ -124,10 +124,10 @@
             <div class = 'stat_container' style="background-color: rgb(23, 30, 130);">
                 <div class = 'character_stat'>
                     <h1>Sanity</h1>
-                    <h1>{{character.sanity}} / {{character.max_sanity}}</h1>
+                    <h1 id="sanity_stat">{{character.sanity}} / {{character.max_sanity}}</h1>
                     <div>
-                        <button>+</button>
-                        <button>-</button>
+                        <button id="sanity_add">+</button>
+                        <button id="sanity_sub">-</button>
                     </div>  
                 </div>
 
@@ -147,10 +147,10 @@
             <div class = 'horror_container'>
                 <div class = 'character_stat'>
                     <h1>Horror</h1>
-                    <h1>{{character.horror}} / {{character.max_horror}}</h1>
+                    <h1 id="horror_stat">{{character.horror}} / {{character.max_horror}}</h1>
                     <div>
-                        <button>+</button>
-                        <button>-</button>
+                        <button id="horror_add">+</button>
+                        <button id="horror_sub">-</button>
                     </div>  
                 </div>
 
@@ -203,6 +203,11 @@ const cycleBtn = document.getElementById('CycleAbilityBtn');
 const health_add = document.getElementById('health_add')
 const health_sub = document.getElementById('health_sub')
 
+const sanity_add = document.getElementById('sanity_add')
+const sanity_sub = document.getElementById('sanity_sub')
+
+const grit_add = document.getElementById("grit_add")
+const grit_sub = document.getElementById("grit_sub")
 
 
 
@@ -262,6 +267,15 @@ cycleBtn.addEventListener('click', async function() {
 health_add.addEventListener('click', () => update_health(1));
 health_sub.addEventListener('click', () => update_health(-1));
 
+sanity_add.addEventListener('click',() => update_sanity(1));
+sanity_sub.addEventListener('click',() => update_sanity(-1));
+
+horror_add.addEventListener('click', () => update_horror(1));
+horror_sub.addEventListener('click', () => update_horror(-1));
+
+grit_add.addEventListener('click', () => update_grit(1));
+grit_sub.addEventListener('click', () => update_grit(-1));
+
 
 async function update_health(num){
     health_label = document.getElementById('health_stat')
@@ -272,6 +286,51 @@ async function update_health(num){
         // if there is a valid response
         if (data.health !== undefined) {
             health_label.textContent = `${data.health} / ${data.max_health}`
+        } 
+    } catch (error) {
+        alert('Failed to cycle ability: ' + error.message);
+    }
+}
+
+async function update_sanity(num){
+    sanity_label = document.getElementById('sanity_stat')
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, { action: 'sanity', amount: num});
+
+        // if there is a valid response
+        if (data.sanity !== undefined) {
+            sanity_label.textContent = `${data.sanity} / ${data.max_sanity}`
+        } 
+    } catch (error) {
+        alert('Failed to cycle ability: ' + error.message);
+    }
+}
+
+async function update_horror(num){
+    horror_label = document.getElementById('horror_stat')
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, { action: 'horror', amount: num });
+
+        // if there is a valid response
+        if (data.horror !== undefined) {
+            horror_label.textContent = `${data.horror} / ${data.max_horror}`
+        } 
+    } catch (error) {
+        alert('Failed to cycle ability: ' + error.message);
+    }
+}
+
+async function update_grit(num){
+    grit_label = document.getElementById('grit_stat')
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, { action: 'grit', amount: num });
+
+        // if there is a valid response
+        if (data.grit !== undefined) {
+            grit_label.textContent = `${data.grit} / ${data.max_grit}`
         } 
     } catch (error) {
         alert('Failed to cycle ability: ' + error.message);

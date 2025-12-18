@@ -232,5 +232,35 @@ class CharacterSheet(models.Model):
         self.health += amount
         self.save()
 
+    def update_sanity(self,amount):
+
+        if (self.sanity + amount) > self.max_sanity:
+            return
+        elif (self.sanity + amount) < 0:
+            return 
+        self.sanity += amount
+        self.save()
+
+    def update_horror(self, amount):
+
+        if (self.horror + amount) > self.max_horror:
+            return
+        elif (self.horror + amount) < 0:
+            return
+
+        self.horror += amount
+        self.save()
+
+    def update_grit(self, amount):
+
+        if (self.grit + amount) > self.max_grit:
+            return
+        elif (self.grit + amount) < 0:
+            return
+
+        self.grit += amount
+        self.save()
+
+
     def __str__(self):
         return f"{self.name} ({self.get_character_class_display()})"
