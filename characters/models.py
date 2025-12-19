@@ -184,6 +184,11 @@ class CharacterSheet(models.Model):
     horror = models.IntegerField(default=0)
     corruption_resistance = models.IntegerField(default=0)
 
+    # resources
+    gold = models.IntegerField(default=0)
+    dark_stone = models.IntegerField(default=0)
+    xp = models.IntegerField(default=0)
+
     class_ability = models.ForeignKey(
         ClassAbility,
         null=True,
@@ -258,6 +263,18 @@ class CharacterSheet(models.Model):
             return
 
         self.grit += amount
+        self.save()
+
+    def update_gold(self, amount):
+        self.gold = max(0, self.gold + amount)
+        self.save()
+
+    def update_dark_stone(self, amount):
+        self.dark_stone = max(0, self.dark_stone + amount)
+        self.save()
+
+    def update_xp(self, amount):
+        self.xp = max(0, self.xp + amount)  # prevent negative XP
         self.save()
 
 

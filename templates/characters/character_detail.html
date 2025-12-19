@@ -76,18 +76,17 @@
         </div> <!-- end of stats -->
 
         <div class="stats-wrapper">
-            <div class = 'combat_container' style="background-color: rgb(91, 32, 15);">
+            <div class = 'combat_container'>
 
 
                 <div class = 'character_stat'>
                     <h1>Grit</h1>
-                    <h1 id="grit_stat">{{character.max_grit}} / {{character.grit}}</h1>
+                    <h1 id="grit_stat">{{character.grit}} / {{character.max_grit}}</h1>
                     <div>
-                        <button id="grit_add">+</button>
-                        <button id="grit_sub">-</button>
+                        <button onclick="update_grit(1)">+</button>
+                        <button onclick="update_grit(-1)">-</button>
                     </div>         
                 </div>
-
 
                 <div class = 'character_stat'>
                     <h1>Range</h1>
@@ -114,8 +113,8 @@
                     <h1>Health</h1>
                     <h1 id = 'health_stat'>{{character.health}} / {{character.max_health}}</h1>
                     <div>
-                        <button id = "health_add">+</button>
-                        <button id = "health_sub">-</button>
+                        <button onclick="update_health(1)">+</button>
+                        <button onclick="update_health(-1)">-</button>
                     </div>  
                 </div>
 
@@ -137,8 +136,8 @@
                     <h1>Sanity</h1>
                     <h1 id="sanity_stat">{{character.sanity}} / {{character.max_sanity}}</h1>
                     <div>
-                        <button id="sanity_add">+</button>
-                        <button id="sanity_sub">-</button>
+                        <button onclick="update_sanity(1)">+</button>
+                        <button onclick="update_sanity(-1)">-</button>
                     </div>  
                 </div>
 
@@ -155,13 +154,13 @@
         </div> <!-- end sanity -->
 
         <div class = 'stats-wrapper'> 
-            <div class = 'horror_container'>
+            <div class = 'dual_container' style="background-color: #351065;">
                 <div class = 'character_stat'>
                     <h1>Horror</h1>
                     <h1 id="horror_stat">{{character.horror}} / {{character.max_horror}}</h1>
                     <div>
-                        <button id="horror_add">+</button>
-                        <button id="horror_sub">-</button>
+                        <button onclick="update_horror(1)">+</button>
+                        <button onclick="update_horror(-1)">-</button>
                     </div>  
                 </div>
 
@@ -170,9 +169,74 @@
                     <h1>{{character.corruption_resistance}}</h1>
 
                 </div>
-            </div> <!-- End of Horror -->
+            </div>
         </div><!-- End of horror -->
-        
+
+        <div class="stats-wrapper">
+            <div class="stat_container" style="background-color: rgb(219, 187, 2);">
+                <div class = 'character_stat'>
+                    <h1 id = 'gold_stat'>Gold: {{character.gold}}</h1>
+                </div>
+                
+                <div class = 'character_stat'>
+                    <button onclick="update_gold(5)">+5</button>
+                    <button onclick="update_gold(10)">+10</button>
+                    <button onclick="update_gold(20)">+20</button>
+                </div>
+
+                <div class="character_stat">
+                    <input
+                        type="number"
+                        id="gold_input"
+                        step="1"
+                        placeholder="+ / - Gold"
+                    >
+                    <button onclick="submitGold()">Apply</button>
+                </div>
+            </div>
+        </div> <!-- End of Gold-->
+    
+        <div class="stats-wrapper">
+            <div class="dual_container" style="background-color: rgb(6, 58, 9);">
+                <div class = 'character_stat'>
+                    <h1 id = 'dark_stone_stat'>Dark Stone: {{character.dark_stone}}</h1>
+                </div>
+                
+                <div class = 'character_stat'>
+                    <button onclick="update_dark_stone(1)">+1</button>
+                    <button onclick="update_dark_stone(-1)">-1</button>
+                </div>
+            </div>
+        </div> <!-- End of Darkstone-->
+
+        <div class="stats-wrapper">
+            <div class="stat_container" style="background-color: rgb(0, 237, 0);">
+                <!-- XP Display -->
+                <div class="character_stat">
+                    <h1 id="xp_stat">XP: {{ character.xp }}</h1>
+                </div>
+
+                <!-- XP Buttons -->
+                <div class="character_stat">
+                    <button onclick="update_xp(5)">+5</button>
+                    <button onclick="update_xp(10)">+10</button>
+                    <button onclick="update_xp(20)">+20</button>
+                </div>
+
+                <!-- XP Input -->
+                <div class="character_stat">
+                    <input
+                        type="number"
+                        id="xp_input"
+                        step="1"
+                        placeholder="+ / - XP"
+                    >
+                    <button onclick="submitXP()">Apply</button>
+                </div>
+            </div>
+        </div> <!-- End of XP -->
+
+
     </div> <!-- end of left page -->
 
     <div class = 'right-container'>
@@ -210,17 +274,6 @@ const currentURL = window.location.href;
 
 // DOM elements
 const cycleBtn = document.getElementById('CycleAbilityBtn');
-
-const health_add = document.getElementById('health_add')
-const health_sub = document.getElementById('health_sub')
-
-const sanity_add = document.getElementById('sanity_add')
-const sanity_sub = document.getElementById('sanity_sub')
-
-const grit_add = document.getElementById("grit_add")
-const grit_sub = document.getElementById("grit_sub")
-
-
 
 // Utility function to send and receive data from backend
 async function fetchData(url, dataDict) {
@@ -273,19 +326,6 @@ cycleBtn.addEventListener('click', async function() {
         alert('Failed to cycle ability: ' + error.message);
     }
 });
-
-
-health_add.addEventListener('click', () => update_health(1));
-health_sub.addEventListener('click', () => update_health(-1));
-
-sanity_add.addEventListener('click',() => update_sanity(1));
-sanity_sub.addEventListener('click',() => update_sanity(-1));
-
-horror_add.addEventListener('click', () => update_horror(1));
-horror_sub.addEventListener('click', () => update_horror(-1));
-
-grit_add.addEventListener('click', () => update_grit(1));
-grit_sub.addEventListener('click', () => update_grit(-1));
 
 
 async function update_health(num){
@@ -348,9 +388,87 @@ async function update_grit(num){
     }
 }
 
+async function update_gold(num) {
+    const gold_label = document.getElementById('gold_stat');
+
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, {
+            action: 'gold',
+            amount: num
+        });
+
+        // if there is a valid response
+        if (data.gold !== undefined) {
+            gold_label.textContent = `Gold: ${data.gold}`;
+        }
+    } catch (error) {
+        alert('Failed to update gold: ' + error.message);
+    }
+};
+async function submitGold(){
+    const input = document.getElementById('gold_input');
+    const value = parseInt(input.value, 10);
+
+    if (isNaN(value)) {
+        alert("Please enter a valid number");
+        return;
+    }
+
+    update_gold(value); // reuse existing API function
+    input.value = '';   // optional reset
+};
+
+async function update_dark_stone(num) {
+    const dark_stone_label = document.getElementById('dark_stone_stat');
+
+    try {
+        // send data into the back end and get the response
+        const data = await fetchData(currentURL, {
+            action: 'dark_stone',
+            amount: num
+        });
+
+        // if there is a valid response
+        if (data.dark_stone !== undefined) {
+            dark_stone_label.textContent = `Dark Stone: ${data.dark_stone}`;
+        }
+    } catch (error) {
+        alert('Failed to update Dark Stone: ' + error.message);
+    }
+};
+
+async function update_xp(num) {
+    const xp_label = document.getElementById('xp_stat');
+
+    try {
+        const data = await fetchData(currentURL, {
+            action: 'xp',
+            amount: num
+        });
+
+        if (data.xp !== undefined) {
+            xp_label.textContent = `XP: ${data.xp}`;
+        }
+    } catch (error) {
+        alert('Failed to update XP: ' + error.message);
+    }
+};
+async function submitXP() {
+    const input = document.getElementById('xp_input');
+    const value = parseInt(input.value, 10);
+
+    if (isNaN(value)) {
+        alert("Please enter a valid number");
+        return;
+    }
+
+    update_xp(value);  // reuse API function
+    input.value = '';  // optional reset
+};
+
 
 </script>
-
 {% endblock content %}
 
 

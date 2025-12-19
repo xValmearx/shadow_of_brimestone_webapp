@@ -151,6 +151,10 @@ body::-webkit-scrollbar {
 }
 
 
+
+
+
+
 /* left and right page container */
 .page-container {
   display: flex;
@@ -212,16 +216,15 @@ body::-webkit-scrollbar {
 
     padding: 5px;
     border-radius: 5px;
+
+    background-color: rgb(91, 32, 15);
 }
 
-/* for character horror stats */
-.horror_container{
+/* for character two stats */
+.dual_container{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
-
-    background-color: #351065;
-
     padding: 5px;
     border-radius: 5px;
 }
@@ -230,6 +233,7 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 /* Remove default h1 margins */
@@ -265,3 +269,8 @@ body::-webkit-scrollbar {
 }
 
 /* class ability Card */
+
+
+
+
+

@@ -178,5 +178,30 @@ class CharacterDetailView(DetailView):
                 "grit": self.object.grit,
                 "max_grit": self.object.max_grit,
             })
+        
+        if action == 'gold':
+            amount = int(request.POST.get('amount'))
+            self.object.update_gold(amount)
+
+            return JsonResponse({
+                "gold": self.object.gold,
+            })
+        
+        if action == 'dark_stone':
+            amount = int(request.POST.get('amount'))
+            self.object.update_dark_stone(amount) 
+
+            return JsonResponse({
+                "dark_stone": self.object.dark_stone,
+            })
+        
+        if action == 'xp':
+            amount = int(request.POST.get('amount'))
+            self.object.update_xp(amount)
+
+            return JsonResponse({
+                "xp": self.object.xp,
+            })
+
         # Handle unknown actions
         return JsonResponse({"error": "Unknown action"}, status=400)
