@@ -1,5 +1,6 @@
 # characters/views.py
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,8 +8,8 @@ from django.http import JsonResponse
 
 
 from .models import Ability, ClassAbility
-from .forms import CharacterCreateForm
-from .models import CharacterSheet, CLASS_DEFAULT_STATS
+from .forms import CharacterCreateForm, AddCharacterTokenForm
+from .models import CharacterSheet, CharacterToken,CLASS_DEFAULT_STATS
 
 class CharacterCreateView(LoginRequiredMixin, FormView):
 
@@ -33,19 +34,6 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
 
         # CLASS_DEFAULT_STATS has a BUNCH of info, it stores default classes and thier stats
         # marshall has a agility of 3, but gunslinger has agility of 6 for example
-
-        # CLASS_DEFAULT_STATS = {
-        # 'marshall':{
-        #     'agility': 3,
-        #     'cunning':4,
-        #     },
-
-        # 'gunslinger': {
-        #     'agility': 6,
-        #     'cunning':2,
-        #     },
-        #                     }
-        
 
 
         # stats then gets the corresponding data dict based on the class
@@ -75,6 +63,7 @@ class CharacterCreateView(LoginRequiredMixin, FormView):
             # set the current ability
             self.character.current_ability = ability_set.first()
 
+            # set the class ability
             self.character.class_ability  = ClassAbility.objects.get(name__in=['Double Shot'])
 
             self.character.save()
@@ -205,3 +194,37 @@ class CharacterDetailView(DetailView):
 
         # Handle unknown actions
         return JsonResponse({"error": "Unknown action"}, status=400)
+    
+class AddTokenToCharacterView(FormView):
+    template_name = "characters/add_token.html"
+    form_class = AddCharacterTokenForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.character = get_object_or_404(
+            CharacterSheet,
+            id=self.kwargs["character_pk"]
+        )
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        token = form.cleaned_data["token"]
+
+        CharacterToken.objects.create(
+            character=self.character,
+            token=token
+        )
+
+        
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "character_detail",
+            kwargs={"pk": self.character.id}
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["character"] = self.character
+        return context

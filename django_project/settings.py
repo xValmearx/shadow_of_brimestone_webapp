@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # local installed apps
     'accounts.apps.AccountsConfig',
     'characters.apps.CharactersConfig',
+    'tokens.apps.TokensConfig',
 
     # third party installed apps
 ]

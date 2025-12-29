@@ -1,0 +1,9 @@
+<!-- templates/characters/add_token.html -->
+
+<h2>Add Token to {{ character.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Token</button>
+</form>

@@ -1,6 +1,9 @@
 # characters/forms.py
 from django import forms
+
+# app imports
 from .models import CHARACTER_CLASSES
+from tokens.models import SaddleBagToken
 
 class CharacterCreateForm(forms.Form):
 
@@ -16,3 +19,11 @@ class CharacterCreateForm(forms.Form):
         choices=CHARACTER_CLASSES, 
         label="Select Character Class"
         )
+    
+
+class AddCharacterTokenForm(forms.Form):
+    token = forms.ModelChoiceField(
+        queryset=SaddleBagToken.objects.all(),
+        label="Select Saddle Bag Token",
+        empty_label="-- Choose a token --"
+    )

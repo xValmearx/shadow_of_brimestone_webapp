@@ -2,6 +2,8 @@
 from django.conf import settings
 from django.db import models
 
+from tokens.models import SaddleBagToken
+
 
 CHARACTER_CLASSES = [
     ('marshall', 'Marshall'),
@@ -120,6 +122,7 @@ CLASS_DEFAULT_STATS = {
         },
 }
 
+
 class ClassAbility(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -134,7 +137,6 @@ class Ability(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class CharacterSheet(models.Model):
@@ -280,3 +282,20 @@ class CharacterSheet(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_character_class_display()})"
+
+
+# to get tokens in html, use {{character.tokens.all}}
+class CharacterToken(models.Model):
+    character = models.ForeignKey(
+        CharacterSheet,
+        on_delete=models.CASCADE,
+        related_name='tokens'  # lets you access: character.tokens.all
+    )
+
+    token = models.ForeignKey(
+        SaddleBagToken,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"{self.character.name} - {self.token.name}"

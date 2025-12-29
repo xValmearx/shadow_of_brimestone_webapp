@@ -1,6 +1,11 @@
 # characters/admin.py
 from django.contrib import admin
-from .models import Ability, CharacterSheet, ClassAbility
+from .models import Ability, CharacterSheet, ClassAbility, CharacterToken
+
+class CharacterTokenInline(admin.TabularInline):
+    model = CharacterToken
+    extra = 1  # how many empty forms to show by default
+    autocomplete_fields = ['token']  # optional if you have many tokens
 
 @admin.register(Ability)
 class AbilityAdmin(admin.ModelAdmin):
@@ -20,3 +25,4 @@ class CharacterSheetAdmin(admin.ModelAdmin):
     list_filter = ('character_class',)
     filter_horizontal = ('abilities',)
     list_filter = ('class_ability',)
+    inlines = [CharacterTokenInline]  # <-- add this line
