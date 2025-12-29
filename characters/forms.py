@@ -13,8 +13,9 @@ class CharacterCreateForm(forms.Form):
         widget=forms.TextInput(attrs={
             "placeholder": "Enter character name"
         })
-    )
+    )  
 
+    # let the user choose from a drop down menu of different premade class choices
     character_class = forms.ChoiceField(
         choices=CHARACTER_CLASSES, 
         label="Select Character Class"
@@ -22,6 +23,7 @@ class CharacterCreateForm(forms.Form):
     
 
 class AddCharacterTokenForm(forms.Form):
+    # let the user choose from a drop down menu of different token choices
     token = forms.ModelChoiceField(
         queryset=SaddleBagToken.objects.all(),
         label="Select Saddle Bag Token",

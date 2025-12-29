@@ -268,16 +268,9 @@
         <a href="{% url 'add_token_to_character' character.pk %}" class="add_token_btn">+ Add Token</a>
     </div>
 
-    <!-- Token Grid -->
-    <div id = 'token_wrapper' class="token_wrapper">
-        {% for char_token in character.tokens.all %}
-            <div class="token_card">
-                <h1>{{ char_token.token.name }}</h1>
-                <p>{{ char_token.token.description }}</p>
-            </div>
-        {% empty %}
-            <p class="empty_tokens">No tokens available</p>
-        {% endfor %}
+    <div id="token_wrapper" class="token_wrapper">
+        <!-- Token Grid -->
+        {% include 'characters/_token_list.html' %}
     </div>
 </div>
 
@@ -290,7 +283,7 @@ function getCSRFToken() {
 }
 
 // Get the current URL (character detail page URL)
-const currentURL = window.location.href;
+const currentURL = "{% url 'character_detail' character.pk %}";
 
 // DOM elements
 const cycleBtn = document.getElementById('CycleAbilityBtn');
@@ -487,6 +480,25 @@ async function submitXP() {
     input.value = '';  // optional reset
 };
 
+
+async function deleteToken(charTokenPk) {
+    try {
+        const data = await fetchData(currentURL, {
+            action: 'delete_token',
+            char_token_pk: charTokenPk
+        });
+
+        if (data.success) {
+            // Only replace inner HTML, not the wrapper itself
+            document.getElementById('token_wrapper').innerHTML = data.html;
+        }
+    } catch (err) {
+        console.error('Failed to delete token:', err);
+        // Optional: alert('Failed to delete token');
+    }
+
+    resizeAllTokens()
+}
 
 
 function resizeText(el, maxSize, minSize, scale = 0.6) {

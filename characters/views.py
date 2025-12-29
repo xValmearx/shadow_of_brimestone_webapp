@@ -5,6 +5,7 @@ from django.views.generic.edit import FormView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 from .models import Ability, ClassAbility
@@ -192,6 +193,17 @@ class CharacterDetailView(DetailView):
                 "xp": self.object.xp,
             })
 
+        if action == "delete_token":
+            char_token_pk = request.POST.get("char_token_pk")
+            char_token = get_object_or_404(CharacterToken, pk=char_token_pk, character=self.object)
+            char_token.delete()
+
+            # Render only the cards (inner HTML)
+            html = render_to_string('characters/_token_list.html', {'character': self.object})
+            return JsonResponse({"success": True, "html": html})
+
+        
+    
         # Handle unknown actions
         return JsonResponse({"error": "Unknown action"}, status=400)
     

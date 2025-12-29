@@ -1,0 +1,14 @@
+
+{% for char_token in character.tokens.all %}
+    <div id="token-{{ char_token.pk }}" class="token_card">
+        <h1>{{ char_token.token.name }}</h1>
+        <p>{{ char_token.token.description }}</p>
+        <button 
+        class="delete-token-btn" 
+        data-char-token-pk="{{ char_token.pk }}"
+        onclick= "deleteToken('{{char_token.pk}}')"
+        >Delete</button>
+    </div>
+{% empty %}
+    <p class="empty_tokens">No tokens available</p>
+{% endfor %}
