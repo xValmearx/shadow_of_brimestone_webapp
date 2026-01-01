@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 
 
-    {% block header %}
-      {% if user.is_authenticated %}
-      <nav-bar
-      logo = '{{character.name}}'
-      logout-url="{% url 'logout' %}" 
-      csrf-token="{{ csrf_token }}"
-      character_list_url = "{% url 'character_list' %}"
-      ></nav-bar>
-      {% endif %}
-    {% endblock header %}
 
 {% block content %}
 
@@ -18,263 +8,124 @@
   {% csrf_token %}
 </div>
 
-<!-- Page container has two sides, left and right -->
-<div class = 'page-container'>
+<div class="page-container">
 
-    <!-- left page components -->
-    <div class = 'left-container'>
-
-        <!-- Stat Wrapper -->
-        <div class="stats-wrapper">
-
-            <!-- Div for background color of all player attributes -->
-            <div style="background-color: rgb(139, 94, 26); border-radius: 5px;">
-
-                <!-- Div containing the first 3 attributes -->
-                <div class="stat_container">
-
-                    <!-- Agility -->
-                    <div class="character_stat">
-                        <h1>Agility</h1>
-                        <h1>{{ character.agility }}</h1>
-                    </div>
-                    <!-- Cunning -->
-                    <div class="character_stat">
-                        <h1>Cunning</h1>
-                        <h1>{{ character.cunning }}</h1>
-                    </div>
-
-                    <!-- Spirit -->
-                    <div class="character_stat">
-                        <h1>Spirit</h1>
-                        <h1>{{ character.spirit }}</h1>
-                    </div>
-                </div>
-
-                <!-- second container -->
-                <div class="stat_container">
-
-                    <!-- Strength -->
-                    <div class="character_stat">
-                        <h1>Strength</h1>
-                        <h1>{{ character.strength }}</h1>
-                    </div>
-
-                    <!-- Lore -->
-                    <div class="character_stat">
-                        <h1>Lore</h1>
-                        <h1>{{ character.lore }}</h1>
-                    </div>
-
-                    <!-- Luck -->
-                    <div class="character_stat">
-                        <h1>Luck</h1>
-                        <h1>{{ character.luck }}</h1>
-                    </div>
-                </div> <!-- stat container-->
-            </div> <!-- background color div-->
-        </div> <!-- end of stats -->
-
-        <div class="stats-wrapper">
-            <div class = 'combat_container'>
-
-
-                <div class = 'character_stat'>
-                    <h1>Grit</h1>
-                    <h1 id="grit_stat">{{character.grit}} / {{character.max_grit}}</h1>
-                    <div>
-                        <button onclick="update_grit(1)">+</button>
-                        <button onclick="update_grit(-1)">-</button>
-                    </div>         
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Range</h1>
-                    <h1>{{character.range}}+</h1>
-                </div>
-                <div class = 'character_stat'>
-                    <h1>Melee</h1>
-                    <h1>{{character.melee}}+</h1>
-                    <h3>Combat: {{character.combat}}</h3>
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Initiative</h1>
-                    <h1>{{character.initiative}}</h1>
-                </div>
-
-
-            </div>
-        </div> <!-- end of combat -->
-
-        <div class = 'stats-wrapper'>
-            <div class = 'stat_container' style="background-color: rgb(132, 19, 19);">
-                <div class = 'character_stat'>
-                    <h1>Health</h1>
-                    <h1 id = 'health_stat'>{{character.health}} / {{character.max_health}}</h1>
-                    <div>
-                        <button onclick="update_health(1)">+</button>
-                        <button onclick="update_health(-1)">-</button>
-                    </div>  
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Defense</h1>
-                    <h1>{{character.defense}}+</h1>
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Armor</h1>
-                    <h1>{{character.armor}}</h1>
-                </div>
-            </div>
-        </div> <!-- end of health -->
-
-        <div class = 'stats-wrapper'>
-            <div class = 'stat_container' style="background-color: rgb(23, 30, 130);">
-                <div class = 'character_stat'>
-                    <h1>Sanity</h1>
-                    <h1 id="sanity_stat">{{character.sanity}} / {{character.max_sanity}}</h1>
-                    <div>
-                        <button onclick="update_sanity(1)">+</button>
-                        <button onclick="update_sanity(-1)">-</button>
-                    </div>  
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Will Power</h1>
-                    <h1>{{character.will_power}}+</h1>
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Spirit Armor</h1>
-                    <h1>{{character.spirit_armor}}</h1>
-                </div>
-            </div>
-        </div> <!-- end sanity -->
-
-        <div class = 'stats-wrapper'> 
-            <div class = 'dual_container' style="background-color: #351065;">
-                <div class = 'character_stat'>
-                    <h1>Horror</h1>
-                    <h1 id="horror_stat">{{character.horror}} / {{character.max_horror}}</h1>
-                    <div>
-                        <button onclick="update_horror(1)">+</button>
-                        <button onclick="update_horror(-1)">-</button>
-                    </div>  
-                </div>
-
-                <div class = 'character_stat'>
-                    <h1>Corruption Resistance</h1>
-                    <h1>{{character.corruption_resistance}}</h1>
-
-                </div>
-            </div>
-        </div><!-- End of horror -->
-
-        <div class="stats-wrapper">
-            <div class="stat_container" style="background-color: rgb(219, 187, 2);">
-                <div class = 'character_stat'>
-                    <h1 id = 'gold_stat'>Gold: {{character.gold}}</h1>
-                </div>
-                
-                <div class = 'character_stat'>
-                    <button onclick="update_gold(5)">+5</button>
-                    <button onclick="update_gold(10)">+10</button>
-                    <button onclick="update_gold(20)">+20</button>
-                </div>
-
-                <div class="character_stat">
-                    <input
-                        type="number"
-                        id="gold_input"
-                        step="1"
-                        placeholder="+ / - Gold"
-                    >
-                    <button onclick="submitGold()">Apply</button>
-                </div>
-            </div>
-        </div> <!-- End of Gold-->
-    
-        <div class="stats-wrapper">
-            <div class="dual_container" style="background-color: rgb(6, 58, 9);">
-                <div class = 'character_stat'>
-                    <h1 id = 'dark_stone_stat'>Dark Stone: {{character.dark_stone}}</h1>
-                </div>
-                
-                <div class = 'character_stat'>
-                    <button onclick="update_dark_stone(1)">+1</button>
-                    <button onclick="update_dark_stone(-1)">-1</button>
-                </div>
-            </div>
-        </div> <!-- End of Darkstone-->
-
-        <div class="stats-wrapper">
-            <div class="stat_container" style="background-color: rgb(0, 237, 0);">
-                <!-- XP Display -->
-                <div class="character_stat">
-                    <h1 id="xp_stat">XP: {{ character.xp }}</h1>
-                </div>
-
-                <!-- XP Buttons -->
-                <div class="character_stat">
-                    <button onclick="update_xp(5)">+5</button>
-                    <button onclick="update_xp(10)">+10</button>
-                    <button onclick="update_xp(20)">+20</button>
-                </div>
-
-                <!-- XP Input -->
-                <div class="character_stat">
-                    <input
-                        type="number"
-                        id="xp_input"
-                        step="1"
-                        placeholder="+ / - XP"
-                    >
-                    <button onclick="submitXP()">Apply</button>
-                </div>
-            </div>
-        </div> <!-- End of XP -->
-
-
-    </div> <!-- end of left page -->
-
-    <div class = 'right-container'>
-
-        <div class = 'ability_card'>
-            <h1 style="background-color: rgb(184, 18, 18);">{{ character.class_ability.name }}</h1>
-            <div style=" height: 100%; display: flex; justify-content: center; align-items: center;">
-                <p>{{ character.class_ability.description }}</p>
-            </div>
-        </div>
+    <div class="Hero-Section">
+        <h1>{{character.name}}</h1>
         <br>
+        <h3>{{character.character_class}}</h3>
+        <p>XP: {{character.xp}}</p>
+    </div>
 
-        <div class = 'ability_card'>
-            <h1 id="CurrentAbilityName" style="background-color: rgb(39, 123, 57);">{{ character.current_ability.name }}</h1>
-            <div style=" height: 100%; display: flex; justify-content: center; align-items: center; ;">
-                <p id="CurrentAbilityDescription">{{ character.current_ability.description }}</p>
-            </div>
+    <div class="two-column-section">
+
+    <div class="left-column">
+
+        <div class="banner">
+            <h1>📋 Attributes</h1>
         </div>
-        <br>
-        <button id="CycleAbilityBtn">Next Ability</button>
+
+        <!-- this container holds primary attributes such as agility, cunning etc -->
+        <div class="attribute-container">
+             <div class="attribute-card">
+                <h1>⚡️</h1>
+                <p>agility</p>
+                <h1>{{character.agility}}</h1>
+             </div>
         
-    </div>
-</div> <!-- page-container -->
+             <div class="attribute-card">
+                <h1>🧠</h1>
+                <p>Cunning</p>
+                <h1>{{character.cunning}}</h1>
+             </div>
+    
+             <div class="attribute-card">
+                <h1>👻</h1>
+                <p>spirit</p>
+                <h1>{{character.spirit}}</h1>
+             </div>
 
-<div class="token_section">
-    <!-- Header with button -->
+             <div class="attribute-card">
+                <h1>💪</h1>
+                <p>strength</p>
+                <h1>{{character.strength}}</h1>
+             </div>
 
-    <div class="token_header">
-        <a href="{% url 'add_token_to_character' character.pk %}" class="add_token_btn">+ Add Token</a>
-    </div>
+             <div class="attribute-card">
+                <h1>📖</h1>
+                <p>lore</p>
+                <h1>{{character.lore}}</h1>
+             </div>
 
-    <div id="token_wrapper" class="token_wrapper">
-        <!-- Token Grid -->
-        {% include 'characters/_token_list.html' %}
+             <div class="attribute-card">
+                <h1>🎲</h1>
+                <p>luck</p>
+                <h1>{{character.luck}}</h1>
+             </div>
+        </div> <!-- attribute container-->
+
+
+
+        <div class="banner">
+            <h1>⚔️ Combat</h1>
+        </div>
+
+        <!-- this container holds combat information -->
+        <div class="attribute-container">
+             <div class="attribute-card">
+                <h1>🏃</h1>
+                <p>Initiative</p>
+                <h1>{{character.initiative}}</h1>
+             </div>
+        
+             <div class="attribute-card">
+                <h1>🏹</h1>
+                <p>Range</p>
+                <h1>{{character.range}}+</h1>
+             </div>
+    
+             <div class="attribute-card">
+                <h1>🗡️</h1>
+                <p>Melee | combat:  <span style="font-size: 1.5em; font-weight: bold;">{{character.combat}}</span> </p>
+                <h1>{{character.melee}}+</h1>
+             </div>
+        </div> <!-- attribute container-->
+
+
+        <div class="banner">
+            <h1>🫀 Vitality</h1>
+        </div>
+
+        <div class="vitality-container">
+
+        <div class="vital-card">
+            <div class="vital-label">❤️ Health</div>
+            <div class="vital-label">🛡️ Armor: <span style="font-size: 1.2em;">{{character.armor}}</span></div>
+            <div class="vital-bar">
+                <div class="vital-fill" style="width:{{character.calculated_health}}%"></div>
+                <div class="vital-text">{{character.health}} / {{character.max_health}}</div>
+            </div>
+        </div>
+
+        </div> <!-- vitality card-->
+
+
+    </div> <!-- Left conainter-->
+    
+    <div class="right-column">
+        <!-- Your right side content here -->
     </div>
 </div>
 
 
+        
+
+    
+
+
+
+
+</div>
 
 <script>
 // Get CSRF token from the hidden div
@@ -401,6 +252,8 @@ async function update_grit(num){
     }
 }
 
+
+
 async function update_gold(num) {
     const gold_label = document.getElementById('gold_stat');
 
@@ -418,18 +271,6 @@ async function update_gold(num) {
     } catch (error) {
         alert('Failed to update gold: ' + error.message);
     }
-};
-async function submitGold(){
-    const input = document.getElementById('gold_input');
-    const value = parseInt(input.value, 10);
-
-    if (isNaN(value)) {
-        alert("Please enter a valid number");
-        return;
-    }
-
-    update_gold(value); // reuse existing API function
-    input.value = '';   // optional reset
 };
 
 async function update_dark_stone(num) {
@@ -467,38 +308,6 @@ async function update_xp(num) {
         alert('Failed to update XP: ' + error.message);
     }
 };
-async function submitXP() {
-    const input = document.getElementById('xp_input');
-    const value = parseInt(input.value, 10);
-
-    if (isNaN(value)) {
-        alert("Please enter a valid number");
-        return;
-    }
-
-    update_xp(value);  // reuse API function
-    input.value = '';  // optional reset
-};
-
-
-async function deleteToken(charTokenPk) {
-    try {
-        const data = await fetchData(currentURL, {
-            action: 'delete_token',
-            char_token_pk: charTokenPk
-        });
-
-        if (data.success) {
-            // Only replace inner HTML, not the wrapper itself
-            document.getElementById('token_wrapper').innerHTML = data.html;
-        }
-    } catch (err) {
-        console.error('Failed to delete token:', err);
-        // Optional: alert('Failed to delete token');
-    }
-
-    resizeAllTokens()
-}
 
 
 function resizeText(el, maxSize, minSize, scale = 0.6) {
@@ -522,9 +331,6 @@ function resizeAllTokens() {
         resizeText(p, 30, 25, 0.4);
     });
 }
-
-// Run after page load (Django content is already rendered)
-window.addEventListener("load", resizeAllTokens);
 
 
 </script>

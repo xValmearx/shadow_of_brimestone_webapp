@@ -5,47 +5,24 @@ class NavBar extends HTMLElement {
     const csrfToken = this.getAttribute("csrf-token");
     const character_list_url = this.getAttribute('character_list_url');
 
-    const logo = this.getAttribute('logo');
-
-    if(logo){
       this.innerHTML = `
       <nav class="navbar">
-          <div class="nav_logo">Shadow of Brimestone | ${logo}</div>
-          <ul class="nav-links">
-              <li><a href="${character_list_url}">Home</a></li>
-              <li>
-                <form action="${logoutUrl}" method="POST">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
-                  <button type="submit" class="nav-link-btn">Logout</button>
-                </form>
-              </li>
-          </ul>
-      </nav>
-      <div class="nav-spacer"></div>
-    `;
-    }
+      
+        <span class="navbar-title">Shadows of Brimstone</span>
 
-    else{
-      this.innerHTML = `
-      <nav class="navbar">
-          <div class="nav_logo">Shadow of Brimestone</div>
-          <ul class="nav-links">
-              <li><a href="${character_list_url}">Home</a></li>
-              <li>
-                <form action="${logoutUrl}" method="POST">
+          <div class="navbar-menu">
+              <a href="${character_list_url}" class="nav-link">📊 Characters</a>
+              
+              <form class = 'nav-link logout'action="${logoutUrl}" method="POST">
                   <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
-                  <button type="submit" class="nav-link-btn">Logout</button>
+                  <button type="submit" class="nav-link-btn">❌ Logout</button>
                 </form>
-              </li>
-          </ul>
+          </div>
       </nav>
-      <div class="nav-spacer"></div>
     `;
-    }
   }
 }
 customElements.define('nav-bar', NavBar);
-
 
 
 

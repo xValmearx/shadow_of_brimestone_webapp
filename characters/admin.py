@@ -23,6 +23,5 @@ class CharacterSheetAdmin(admin.ModelAdmin):
     list_display = ('name', 'character_class', 'user', 'current_ability')
     search_fields = ('name', 'user__username')
     list_filter = ('character_class',)
-    filter_horizontal = ('abilities',)
-    list_filter = ('class_ability',)
+    filter_horizontal = ('abilities',"class_abilities",)
     inlines = [CharacterTokenInline]  # <-- add this line

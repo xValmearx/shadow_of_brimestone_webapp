@@ -47,33 +47,42 @@ CLASS_DEFAULT_STATS = {
         'horror':0,
         'corruption_resistance':0,
 
+        # Class abilities
+        'class_abilities': ['Double Shot',],
+
+        'starting_abilities': [
+            "Hardend Resolve",
+            "Rolling Thunder",
+            "Cleaning Up The West",
+        ],
+
         },
 
     'gunslinger': {
         # skills
         'agility': 3,
-        'cunning':4,
+        'cunning':3,
         'spirit': 2,
         'strength': 2,
-        'lore': 1,
-        'luck':3,
+        'lore': 2,
+        'luck':4,
 
         # combat skills
-        'combat':2,
+        'combat':1,
         'max_grit':2,
         'grit':2,
-        "range":4,
-        "melee":4,
-        'initiative':4,
+        "range":3,
+        "melee":5,
+        'initiative':6,
 
         # physical health
         'max_health': 10,
         'health':0,
-        'defense': 3,
+        'defense': 5,
         'armor':0,
 
         # mental health
-        'max_sanity': 10,
+        'max_sanity': 12,
         'sanity':0,
         'will_power':4,
         'spirit_armor':0,
@@ -82,17 +91,26 @@ CLASS_DEFAULT_STATS = {
         'max_horror':5,
         'horror':0,
         'corruption_resistance':0,
+
+        # Class abilities
+        'class_abilities': ['Quick and the Dead',],
+        
+        'starting_abilities': [
+            "Reload",
+            "QuickDraw",
+            "Pistol Fanning"
+        ],
 
         },
 
     'rancher': {
         # skills
-        'agility': 3,
-        'cunning':4,
-        'spirit': 2,
-        'strength': 2,
-        'lore': 1,
-        'luck':3,
+        'agility': 2,
+        'cunning':2,
+        'spirit': 3,
+        'strength': 3,
+        'lore': 4,
+        'luck':1,
 
         # combat skills
         'combat':2,
@@ -100,12 +118,12 @@ CLASS_DEFAULT_STATS = {
         'grit':2,
         "range":4,
         "melee":4,
-        'initiative':4,
+        'initiative':3,
 
         # physical health
-        'max_health': 10,
+        'max_health': 14,
         'health':0,
-        'defense': 3,
+        'defense': 4,
         'armor':0,
 
         # mental health
@@ -118,6 +136,15 @@ CLASS_DEFAULT_STATS = {
         'max_horror':5,
         'horror':0,
         'corruption_resistance':0,
+
+        # Class abilities
+        'class_abilities': ['Rapid Shot','Evasion'],
+        
+        'starting_abilities': [
+            "Home Remedies",
+            "Swinging Rifle",
+            "Farmstead Defender"
+        ],
 
         },
 }
@@ -172,6 +199,8 @@ class CharacterSheet(models.Model):
     # physical health
     max_health = models.IntegerField(default=0)
     health = models.IntegerField(default=0)
+    calculated_health = models.FloatField(default=0)
+
     defense = models.IntegerField(default=0)
     armor = models.IntegerField(default=0)
 
@@ -191,13 +220,10 @@ class CharacterSheet(models.Model):
     dark_stone = models.IntegerField(default=0)
     xp = models.IntegerField(default=0)
 
-    class_ability = models.ForeignKey(
+    class_abilities = models.ManyToManyField(
         ClassAbility,
-        null=True,
         blank=True,
-        on_delete=models.SET_NULL,
     )
-
 
     # abilities
     abilities = models.ManyToManyField(Ability, blank=True)
@@ -279,6 +305,9 @@ class CharacterSheet(models.Model):
         self.xp = max(0, self.xp + amount)  # prevent negative XP
         self.save()
 
+    def calc_health(self):
+        self.calculated_health = (self.health / self.max_health) * 100
+        self.save()
 
     def __str__(self):
         return f"{self.name} ({self.get_character_class_display()})"

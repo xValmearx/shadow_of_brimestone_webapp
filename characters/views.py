@@ -13,66 +13,50 @@ from .forms import CharacterCreateForm, AddCharacterTokenForm
 from .models import CharacterSheet, CharacterToken,CLASS_DEFAULT_STATS
 
 class CharacterCreateView(LoginRequiredMixin, FormView):
-
-    # template name get the html page to use when creating a character
     template_name = 'characters/create_character.html'
-
-    # get the form we are using when creating a new character,
-    # this form only allows the user to select a character class, like marshall,gunslinger etc
     form_class = CharacterCreateForm
 
-
-    # temp varible
     character = None
 
-    # after a form is submitted
     def form_valid(self, form):
-
-        # get the cleaned character class data from user
+        # Get cleaned form data
         char_class = form.cleaned_data['character_class']
-
         char_name = form.cleaned_data['character_name']
 
-        # CLASS_DEFAULT_STATS has a BUNCH of info, it stores default classes and thier stats
-        # marshall has a agility of 3, but gunslinger has agility of 6 for example
+        #  Copy the class defaults to avoid mutating the original dict
+        stats = CLASS_DEFAULT_STATS.get(char_class, {}).copy()
 
+        # Extract abilities and remove them from stats so they are not passed to create()
+        class_abilities_names = stats.pop('class_abilities', [])
+        starting_abilities_names = stats.pop('starting_abilities', [])
 
-        # stats then gets the corresponding data dict based on the class
-        stats = CLASS_DEFAULT_STATS.get(char_class, {})
-
+        # 1️⃣ Create character with only numeric/model fields
         self.character = CharacterSheet.objects.create(
             user=self.request.user,
             character_class=char_class,
-            name = char_name,
-
-            # this stats function then automatically takes all the key word skills 
-            # and assigns them into the correct data fields
+            name=char_name,
             **stats
         )
 
-        # Example: Marshall abilities
-        if char_class == 'marshall':
+        # 2️ Set starting abilities (ManyToMany)
+        if starting_abilities_names:
+            starting_abilities_qs = Ability.objects.filter(name__in=starting_abilities_names)
+            self.character.abilities.set(starting_abilities_qs)
+            # Optionally set the current ability to the first one
+            self.character.current_ability = starting_abilities_qs.first()
 
-            # get the set abilities for this character class
-            ability_set = Ability.objects.filter(name__in=[
-                "Hardend Resolve", "Rolling Thunder", "Cleaning Up The West"
-            ])
+        # 3️ Set class abilities (ManyToMany)
+        if class_abilities_names:
+            class_abilities_qs = ClassAbility.objects.filter(name__in=class_abilities_names)
+            self.character.class_abilities.set(class_abilities_qs)
 
-            # set the filtered abilites
-            self.character.abilities.set(ability_set)
-
-            # set the current ability
-            self.character.current_ability = ability_set.first()
-
-            # set the class ability
-            self.character.class_ability  = ClassAbility.objects.get(name__in=['Double Shot'])
-
-            self.character.save()
+        # Save the character after setting all ManyToMany fields
+        self.character.save()
 
         return super().form_valid(form)
 
     def get_success_url(self):
-        # Redirect to the character list
+        # Redirect to character list
         return reverse_lazy('character_list')
     
 class CharacterListView(LoginRequiredMixin, ListView):

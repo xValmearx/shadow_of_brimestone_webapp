@@ -8,21 +8,42 @@
 
 /* Custom varibles to keep website consistant  */
 :root{
-  --main-color: #c7b47c;
-  --secondary-color:#9b8952;
-  --thrid-color:#bfe79e;
-  --light-blue:#58bff7;
-  --dark-blue:#0E2C40;
-  --side-margin:20vw;
+    --dark-brown:#1e0c01;
+    --medium-brown:#321601;
 
-  --background-color: #d5c186;
+    --background-color:#3b2415;
 
-  --large-card-margin:3%;
+    --boarder-color:#9f7d4f;
+    --boarder-hover-color:#d4af37;
+    --hover-box-shadow:rgba(212,175,55,0.3);
+
+    --title-color:#d4af37;
+
+    --text-color:#a48354;
+    --text-hover-color:#d4af37;
+
+    --nav-link-bg:rgba(139,111,71,0.2);
+    --nav-link-hover-bg:rgba(212,175,55,0.3);
+
+    --red-text: #ff6b6b;
+    --red-background:rgba(139,71,71,0.3);
+    --red-boarder:#8b4747;
+
+    --red-hover-text:#ff8787;
+    --red-hover-background:rgba(139,71,71,0.5);
+    --red-hover-boarder:#d47;
+    --hover-red-box-shadow:rgba(224, 44, 44, 0.3);
+
+    --banner-background:rgba(148, 117, 73, 0.2);
+
+    --health-background-light:rgba(110, 27, 27, 0.4);
+    --health-background-dark:rgba(97, 25, 25, 0.4);
+
 
 }
 
-/* Hide x-axis over flow */
-html, body {
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
     overflow-x: hidden;
     background-color: var(--background-color);
 
@@ -36,314 +57,279 @@ body::-webkit-scrollbar {
     display: none;            /* Chrome, Edge, Safari */
 }
 
-
-
-
-/* Navbar Code --------------------------------------------------------- */
-.navbar {
-
-    width:100%;
-    height: 10vh;
-    padding: 15px 30px;
-
-
+.page-container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    margin: 20px;
+    width: calc(100% - 40px); /* Subtract both left and right margins */
+    height: calc(100% - 40px); /* Subtract both top and bottom margins */
+
+    gap: 30px;
+}
+
+/* Nav button code */
+
+.navbar {
+    background: linear-gradient(135deg, #1a0f08 0%, #2d1a10 100%);
+    border-bottom: 3px solid var(--boarder-color);
+    padding: 15px 30px;
+    display: flex;
     align-items: center;
-
-    z-index: 1;
-
-
+    justify-content: space-between;
     position: fixed;
-    background-color: var(--main-color);
+    top: 0;
+    z-index: 1000;
 
-    border-bottom: 2px solid #bba974;
+    width: 100%;
+
+    box-shadow: 0 4px 7px black;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.navbar-logo {
+    font-size: 2em;
+}
+
+.navbar-title {
+    font-size: 1.6em;
+    color: var(--title-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 2px solid var(--boarder-color);
     border-radius: 5px;
+    background: var(--nav-link-bg);
+
+    cursor: pointer;
+
+    /* Add smooth transition */
+    transition: all 0.4s ease; /* 0.4s is slower than default */
+}
+
+.nav-link:hover {
+    background: var(--nav-link-hover-bg);
+    border-color: var(--boarder-hover-color);
+    color: var(--text-hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--hover-box-shadow);
+}
+
+.nav-link.logout {
+    background: var(--red-background);
+    border-color: var(--red-boarder);
+    color: var(--red-text);
+
+    /* Add smooth transition */
+    transition: all 0.4s ease; /* 0.4s is slower than default */
+}
+
+.nav-link.logout:hover{
+    background: var(--red-hover-background);
+    border-color: var(--red-hover-boarder);
+    color: var(--red-hover-text);
+    box-shadow: 0 4px 10px var(--hover-red-box-shadow);
+}
+
+.nav-link-btn {
+    all: unset;
+    display: inline-block;
+}
+
+.navbar-spacer{
+    height: 100px;
+}
+
+/* Nav button code */
+
+
+/* Hero Section */
+.Hero-Section{
+    background-color: var(--dark-brown);
+    border: 2px solid var(--boarder-color);
+    border-radius: 5px;
+
+    padding: 35px;
+
+    box-shadow: 0 4px 7px black;
+}
+
+.Hero-Section h1{
+    font-size: 3em;
+    color: var(--title-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.Hero-Section h3{
+    color: var(--boarder-color);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.Hero-Section p{
+    font-size: 15px;
+    color: var(--text-color);
+}
+/* Hero section */
+
+.two-column-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 30px;
+    width: 100%;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    padding:5px;
+
+    gap: 30px;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+}
+
+/* Banner */
+.banner{
+    padding: 10px;
+    background-color: var(--banner-background);
+    color: var(--title-color);
+    font-weight: bold;
+    text-transform: uppercase;
+
+    border-left: 5px solid var(--title-color);
+}
+/* Banner */
+
+/* attribute-container */
+.attribute-container{
+    position: relative;
+
+    justify-self: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    max-width: 800px;
+    gap:15px;
+}
+/* attribute-container */
+
+.attribute-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding:20px;
+    gap: 4px;
+
+    
+
+    aspect-ratio: 1 / 1; /* Makes it square - height matches width */
+    border: 3px solid var(--boarder-color);
+    border-radius: 5px;
+    background-color: var(--dark-brown);
+
+    /* Add smooth transition */
+    transition: all 0.4s ease; /* 0.4s is slower than default */
+}
+
+.attribute-card:hover{
+    border-color: var(--boarder-hover-color);
+    transform: translateY(-8px);
+    box-shadow: 0 4px 10px var(--hover-box-shadow);
+    transform: scale(1.05);
+}
+
+.attribute-card h1{
+    font-size: 3em;
+    color: var(--title-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.attribute-card p{
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--text-color);
     
 }
 
-.nav_logo {
-    color: var(--white);
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-}
-
-.nav-links li a {
-    color: var(--white);
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-.nav-links li a:hover {
-    color: var(--light-blue);
-}
-
-/* Make logout button look like nav links */
-.nav-links li button.nav-link-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-
-    font: inherit;           /* inherit font family, weight, size */
-    color: var(--white);
-    text-decoration: none;
-    font-size: 16px;
-    cursor: pointer;
-
-    transition: 0.3s;
-}
-
-/* Hover matches <a> hover */
-.nav-links li button.nav-link-btn:hover {
-    color: var(--light-blue);
-}
-
-.nav-spacer{
-    height: 10vh;
-    width: 100%;
-}
-/* Navbar Code End --------------------------------------------------------- */
-
-
-
-
-
-/* Info card --------------------------------------------------------- */
- .large_card{
-  background-color: white;
-  box-shadow: 8px 8px 8px rgba(0,0,0,0.3);
-
-  margin-left: var(--side-margin);
-  margin-right: var(--side-margin);
-
-  margin-bottom: 20px;
-
-  padding: 20px;
- }
-
- .large_card img{
-
-  width: 100%;
-  max-width: 600px;
-
-  display: block;
-  margin: 0 auto;
-}
-
-
- .large_card h1{
-
-  margin-left: var(--large-card-margin);
-  margin-right: var(--large-card-margin);
- }
-
-.large_card p{
-  margin-left: var(--large-card-margin);
-  margin-right: var(--large-card-margin);
-}
-
-
-
-
-
-
-/* left and right page container */
-.page-container {
-  display: flex;
-}
-
-.left-container{
-  width: 50%; /* each takes half the screen */
-  margin-left: 20px;
-  margin-right: 10px;
-
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 40px;
-
-  background-color: var(--secondary-color);
-}
-
-
-.right-container {
-  width: 50%; /* each takes half the screen */
-  margin-left: 10px;
-  margin-right: 20px;
-  padding: 40px;
-
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  background-color: var(--secondary-color);
-}
-
-
-.stats-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* keeps both columns aligned */
-    padding: 10px;
-}
-
-
-/*for character stats like agility cunning etc*/
-.stat_container {
+.vitality-container{
+    position: relative;
+    justify-self: center;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
-
-    padding: 5px;
-    border-radius: 5px;
-}
-
-/*for character combat stats like range melee etc*/
-.combat_container{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    width: 100%;
-
-    padding: 5px;
-    border-radius: 5px;
-
-    background-color: rgb(91, 32, 15);
-}
-
-/* for character two stats */
-.dual_container{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.character_stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Remove default h1 margins */
-.character_stat h1 {
-    margin: 0;
+    grid-template-columns: repeat(2, 1fr); /* 3 equal columns */
+    max-width: 800px;
+    gap:15px;
 }
 
 
-/* class ability Card */
-.ability_card{
-    height: 500px;
-    width: 400px;
-
-    background-color: rgb(202, 178, 74);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
-
+.vital-card {
+    background: linear-gradient(135deg, #3d1f1f 0%, #5a2a2a 100%);
+    border: 3px solid #8b4747;
+    border-radius: 8px;
     padding: 20px;
-
-    border: 5px solid black;
-    border-radius: 5px;
-
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-.ability_card h1{
-    border-top: solid black;
-    border-bottom: solid black;
-
-    text-align: center;
-}
-
-.ability_card p{
-    font-size: 30px;
-}
-
-/* class ability Card */
-
-.token_section{
-    margin: 20px;
-
-    border: 3px solid black;
-    border-radius: 6px;
-    background-color: rgb(140, 60, 30);
-}
-
-.token_header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 14px;
+.vital-label {
+    font-size: 1.2em;
+    color: #c9a66b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     margin-bottom: 15px;
 }
 
-.add_token_btn {
-    display: inline-block;
-    padding: 10px 16px;
-    font-size: 16px;
-    background-color: rgb(202, 178, 74);
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.add_token_btn:hover {
-    background-color: rgb(223, 197, 82);
-}
-.token_wrapper {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
-    gap: 20px;
-    margin: 20px auto;
-    padding: 10px;
-    width: 90vw; /* leave a bit of margin on sides */
-}
-
-.token_card {
-    width: 100%;           /* fills the grid column */
-    aspect-ratio: 3 / 4;   /* height scales automatically */
-    background-color: rgb(202, 178, 74);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
-    padding: 10px;
-    border: 3px solid black;
-    border-radius: 5px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-     justify-content: flex-start;  /* start at top */
-}
-
-.token_card h1 {
+.vital-bar {
     width: 100%;
-    margin: 0 0 5px 0;
-    line-height: 1.2;
-
-    text-align: center;
-    border-top: solid black;
-    border-bottom: solid black;
-    background-color: brown;
+    height: 30px;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid rgba(139,111,71,0.5);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
 }
 
-.token_card p {
-    flex: 1;                   /* take remaining space */
-    display: flex;
-    align-items: center;        /* vertical center */
-    justify-content: center;    /* horizontal center */
-    line-height: 1.2;
-    margin: 0;
-    text-align: center;
-    overflow-wrap: break-word;  /* wrap long words */
+.vital-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b2a2a, #d43737);
+    transition: width 0.3s ease;
+    position: relative;
 }
 
+.vital-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers it perfectly */
+    /* your existing vital-text styles */
+    z-index: 10; /* Ensures text is on top */
+
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    font-size: 1.1em;
+}
