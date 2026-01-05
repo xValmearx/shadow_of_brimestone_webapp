@@ -99,7 +99,7 @@ class CharacterDetailView(DetailView):
             # the characters has a method to cycle to a new ability and return the new ability data
             # this cycle abiltiy also saves the ability state in the database as well
             # so if they user logges back in, the current ability will still be there
-            
+
             new_ability = self.object.cycle_ability()
             
             # Handle case where there are no abilities
@@ -142,47 +142,30 @@ class CharacterDetailView(DetailView):
                 "calculated_sanity": self.object.calculated_sanity
             })
         
-        if action == 'horror':
+        if action == 'corruption':
             amount = int(request.POST.get('amount'))
-            self.object.update_horror(amount)
+            self.object.update_corruption(amount)
+            self.object.calc_corruption()
 
             return JsonResponse({
-                "horror": self.object.horror,
-                "max_horror": self.object.max_horror,
+                "success":True,
+                "corruption": self.object.corruption,
+                "max_corruption": self.object.max_corruption,
+                "calculated_corruption":self.object.calculated_corruption,
             })
 
         if action == 'grit':
             amount = int(request.POST.get('amount'))
             self.object.update_grit(amount)
+            self.object.calc_grit()
 
             return JsonResponse({
+                'success': True,
                 "grit": self.object.grit,
                 "max_grit": self.object.max_grit,
+                'calculated_grit':self.object.calculated_grit,
             })
         
-        if action == 'gold':
-            amount = int(request.POST.get('amount'))
-            self.object.update_gold(amount)
-
-            return JsonResponse({
-                "gold": self.object.gold,
-            })
-        
-        if action == 'dark_stone':
-            amount = int(request.POST.get('amount'))
-            self.object.update_dark_stone(amount) 
-
-            return JsonResponse({
-                "dark_stone": self.object.dark_stone,
-            })
-        
-        if action == 'xp':
-            amount = int(request.POST.get('amount'))
-            self.object.update_xp(amount)
-
-            return JsonResponse({
-                "xp": self.object.xp,
-            })
 
         
     

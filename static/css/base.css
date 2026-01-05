@@ -305,6 +305,11 @@ body::-webkit-scrollbar {
     border-color: #a88647;
 }
 
+.vital-card.corruption{
+    background: linear-gradient(135deg, #0f1f0f 0%, #1a2d1a 100%);
+    border-color: #2d4a2d;
+}
+
 .vital-label {
     font-size: 1.2em;
     color: #c9a66b;
@@ -336,6 +341,10 @@ body::-webkit-scrollbar {
 
 .vital-card.grit .vital-fill {
     background: linear-gradient(90deg, #8b6f2a, #d4af37);
+}
+
+.vital-card.corruption .vital-fill{
+    background: linear-gradient( 90deg,#1a4d1a, #2d8b2d);
 }
 
 .vital-text {

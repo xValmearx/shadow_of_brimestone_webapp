@@ -142,6 +142,8 @@
                     {% endif %} Sanity
                 </div>
 
+                <div class="vital-label">🌀 Spirit Armor: <span style="font-size: 1.2em;">{{character.spirit_armor}}</span></div>
+
                 <div class="vital-bar">
                     <div class="vital-fill" id="sanity_bar" style="width:{{character.calculated_sanity}}%"></div>
                     <div class="vital-text" id="sanity_stats">{{character.sanity}} / {{character.max_sanity}}</div> 
@@ -154,11 +156,44 @@
                 <button class="health-btn health-btn-right" onclick="update_sanity(1)">+</button>
             </div> <!-- sanity card-->
 
-        
+            <div class="vital-card grit">
+                <div class="vital-label">⭐️ Grit</div>
+                <br>
+                <br>
+
+                <div class="vital-bar">
+                    <div class="vital-fill" id="grit_bar" style="width:{{character.calculated_grit}}%"></div>
+                    <div class="vital-text" id="grit_stats">{{character.grit}} / {{character.max_grit}}</div>
+                </div>
+
+                <!-- Left button (decrease sanity) -->
+                <button class="health-btn health-btn-left" onclick="update_grit(-1)">−</button>
+
+                <!-- Right button (increase sanity) -->
+                <button class="health-btn health-btn-right" onclick="update_grit(1)">+</button>
+            </div> <!-- grit card-->
+
+            <div class="vital-card corruption">
+                <div class="vital-label">🦠 Corruption</div>
+                <div class="vital-label">💊 Resistance: <span style="font-size: 1.2em;">{{character.corruption_resistance}}</span></div>
+
+                <div class="vital-bar">
+                    <div class="vital-fill" id="corruption_bar" style="width:{{character.calculated_corruption}}%"></div>
+                    <div class="vital-text" id="corruption_stats">{{character.corruption}} / {{character.max_corruption}}</div>
+                </div>
+
+                <!-- Left button (decrease sanity) -->
+                <button class="health-btn health-btn-left" onclick="update_corruption(-1)">−</button>
+                
+                <!-- Right button (increase sanity) -->
+                <button class="health-btn health-btn-right" onclick="update_corruption(1)">+</button>
+
+            </div> <!-- corruption card-->
         
         
         </div> <!-- vitality continer-->
 
+        
 
     </div> <!-- Left conainter-->
     
@@ -242,36 +277,6 @@ cycleBtn.addEventListener('click', async function() {
 });
 
 
-async function update_horror(num){
-    horror_label = document.getElementById('horror_stat')
-    try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, { action: 'horror', amount: num });
-
-        // if there is a valid response
-        if (data.horror !== undefined) {
-            horror_label.textContent = `${data.horror} / ${data.max_horror}`
-        } 
-    } catch (error) {
-        alert('Failed to cycle ability: ' + error.message);
-    }
-}
-
-async function update_grit(num){
-    grit_label = document.getElementById('grit_stat')
-    try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, { action: 'grit', amount: num });
-
-        // if there is a valid response
-        if (data.grit !== undefined) {
-            grit_label.textContent = `${data.grit} / ${data.max_grit}`
-        } 
-    } catch (error) {
-        alert('Failed to cycle ability: ' + error.message);
-    }
-}
-
 
 async function update_health(num){
     const health_label = document.getElementById('health_stat');
@@ -349,6 +354,60 @@ async function update_sanity(num) {
         alert('Failed to update Sanity: ' + error.message);
     }
 }
+
+
+async function update_corruption(num) {
+    const corruption_stats = document.getElementById('corruption_stats')
+    const corruption_bar = document.getElementById('corruption_bar')
+
+    try {
+        const data = await fetchData(currentURL, { action: 'corruption', amount: num});
+
+        if (data.success) {
+            // Update sanity text
+            if (data.corruption !== undefined) {
+                corruption_stats.textContent = `${data.corruption} / ${data.max_corruption}`;
+            }
+            
+            // Update health bar width with smooth transition
+            if (data.calculated_corruption !== undefined) {
+                corruption_bar.style.width = `${data.calculated_corruption}%`;
+
+
+            }
+        } 
+    } catch (error) {
+        alert('Failed to update Sanity: ' + error.message);
+    }
+}
+
+async function update_grit(num) {
+    const grit_stats = document.getElementById('grit_stats')
+    const grit_bar = document.getElementById('grit_bar')
+
+    try {
+        const data = await fetchData(currentURL, { action: 'grit', amount: num});
+
+        if (data.success) {
+            // Update sanity text
+            if (data.grit !== undefined) {
+                grit_stats.textContent = `${data.grit} / ${data.max_grit}`;
+            }
+            
+            // Update health bar width with smooth transition
+            if (data.calculated_grit !== undefined) {
+                grit_bar.style.width = `${data.calculated_grit}%`;
+
+
+            }
+        } 
+    } catch (error) {
+        alert('Failed to update Sanity: ' + error.message);
+    }
+}
+
+
+
 
 </script>
 {% endblock content %}

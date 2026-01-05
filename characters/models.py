@@ -190,8 +190,12 @@ class CharacterSheet(models.Model):
 
     # combat skills
     combat = models.IntegerField(default=0)
+
     max_grit = models.IntegerField(default=0)
     grit = models.IntegerField(default=0)
+    calculated_grit = models.FloatField(default=0)
+
+
     range = models.IntegerField(default=0)
     melee = models.IntegerField(default=0)
     initiative = models.IntegerField(default=0)
@@ -319,6 +323,10 @@ class CharacterSheet(models.Model):
 
     def calc_corruption(self):
         self.calculated_corruption = (self.corruption / self.max_corruption) * 100
+        self.save()
+
+    def calc_grit(self):
+        self.calculated_grit= (self.grit / self.max_grit) * 100
         self.save()
 
     def __str__(self):
