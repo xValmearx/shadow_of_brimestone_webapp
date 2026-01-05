@@ -281,11 +281,10 @@ body::-webkit-scrollbar {
     position: relative;
     justify-self: center;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 3 equal columns */
+    grid-template-columns: repeat(2, 1fr); /* 2 equal columns */
     max-width: 800px;
     gap:15px;
 }
-
 
 .vital-card {
     background: linear-gradient(135deg, #3d1f1f 0%, #5a2a2a 100%);
@@ -293,6 +292,17 @@ body::-webkit-scrollbar {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    position: relative; /* ADD THIS - makes buttons position relative to this card */
+}
+
+.vital-card.sanity {
+    background: linear-gradient(135deg, #1f1f3d 0%, #2a2a5a 100%);
+    border-color: #4747a8;
+}
+
+.vital-card.grit {
+    background: linear-gradient(135deg, #3d2f1f 0%, #5a452a 100%);
+    border-color: #a88647;
 }
 
 .vital-label {
@@ -320,16 +330,61 @@ body::-webkit-scrollbar {
     position: relative;
 }
 
+.vital-card.sanity .vital-fill {
+    background: linear-gradient(90deg, #2a2a8b, #3737d4);
+}
+
+.vital-card.grit .vital-fill {
+    background: linear-gradient(90deg, #8b6f2a, #d4af37);
+}
+
 .vital-text {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* Centers it perfectly */
-    /* your existing vital-text styles */
     z-index: 10; /* Ensures text is on top */
-
     font-weight: bold;
     color: white;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     font-size: 1.1em;
+}
+
+.health-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    width: 40px;
+    height: 80%;
+    
+    background: rgba(212, 175, 55, 0.1);
+    border: 2px solid transparent;
+    color: var(--title-color);
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    
+    opacity: 0; /* Invisible by default */
+    transition: all 0.3s ease;
+    
+    border-radius: 5px;
+}
+
+.health-btn-left {
+    left: 5px;
+}
+
+.health-btn-right {
+    right: 5px;
+}
+
+.vital-card:hover .health-btn {
+    opacity: 1; /* Visible on hover */
+}
+
+.health-btn:hover {
+    background: rgba(212, 175, 55, 0.3);
+    border-color: var(--boarder-hover-color);
+    transform: translateY(-50%) scale(1.1);
 }

@@ -96,18 +96,68 @@
             <h1>🫀 Vitality</h1>
         </div>
 
-        <div class="vitality-container">
+        <div class="vitality-container">  
 
-        <div class="vital-card">
-            <div class="vital-label">❤️ Health</div>
-            <div class="vital-label">🛡️ Armor: <span style="font-size: 1.2em;">{{character.armor}}</span></div>
-            <div class="vital-bar">
-                <div class="vital-fill" style="width:{{character.calculated_health}}%"></div>
-                <div class="vital-text">{{character.health}} / {{character.max_health}}</div>
-            </div>
-        </div>
+            <div class="vital-card" id="health-card" style="position: relative;">
+                <div class="vital-label" id="health_emoji">
+                    {% if character.calculated_health == 0 %}
+                        😵
+                    {% elif character.calculated_health <= 30 %}
+                        🤕
+                    {% elif character.calculated_health <= 60 %}
+                        🫤
+                    {% elif character.calculated_health <= 90 %}
+                        🙂
+                    {% else %}
+                        😃
+                    {% endif %}
+                    Health
+                </div>
 
-        </div> <!-- vitality card-->
+                <div class="vital-label">🛡️ Armor: <span style="font-size: 1.2em;">{{character.armor}}</span></div>
+                
+                <div class="vital-bar">
+                    <div class="vital-fill" id = "health_bar" style="width:{{character.calculated_health}}%"></div>
+                    <div class="vital-text" id="health_stat">{{character.health}} / {{character.max_health}}</div>
+                </div>
+
+                <!-- Left button (decrease health) -->
+                <button class="health-btn health-btn-left" onclick="update_health(-1)">−</button>
+                <!-- Right button (increase health) -->
+                <button class="health-btn health-btn-right" onclick="update_health(1)">+</button>
+            </div> <!-- vitality card-->
+
+
+            <div class="vital-card sanity">
+                <div class="vital-label" id="sanity_emoji">{% if character.calculated_sanity == 0 %}
+                        😱
+                    {% elif character.calculated_sanity <= 30 %}
+                        😨
+                    {% elif character.calculated_sanity <= 60 %}
+                        😧
+                    {% elif character.calculated_sanity <= 90 %}
+                        😐️
+                    {% else %}
+                        😃
+                    {% endif %} Sanity
+                </div>
+
+                <div class="vital-bar">
+                    <div class="vital-fill" id="sanity_bar" style="width:{{character.calculated_sanity}}%"></div>
+                    <div class="vital-text" id="sanity_stats">{{character.sanity}} / {{character.max_sanity}}</div> 
+                </div>
+                
+                <!-- Left button (decrease sanity) -->
+                <button class="health-btn health-btn-left" onclick="update_sanity(-1)">−</button>
+                
+                <!-- Right button (increase sanity) -->
+                <button class="health-btn health-btn-right" onclick="update_sanity(1)">+</button>
+            </div> <!-- sanity card-->
+
+        
+        
+        
+        </div> <!-- vitality continer-->
 
 
     </div> <!-- Left conainter-->
@@ -192,36 +242,6 @@ cycleBtn.addEventListener('click', async function() {
 });
 
 
-async function update_health(num){
-    health_label = document.getElementById('health_stat')
-    try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, { action: 'health', amount: num});
-
-        // if there is a valid response
-        if (data.health !== undefined) {
-            health_label.textContent = `${data.health} / ${data.max_health}`
-        } 
-    } catch (error) {
-        alert('Failed to cycle ability: ' + error.message);
-    }
-}
-
-async function update_sanity(num){
-    sanity_label = document.getElementById('sanity_stat')
-    try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, { action: 'sanity', amount: num});
-
-        // if there is a valid response
-        if (data.sanity !== undefined) {
-            sanity_label.textContent = `${data.sanity} / ${data.max_sanity}`
-        } 
-    } catch (error) {
-        alert('Failed to cycle ability: ' + error.message);
-    }
-}
-
 async function update_horror(num){
     horror_label = document.getElementById('horror_stat')
     try {
@@ -253,85 +273,82 @@ async function update_grit(num){
 }
 
 
-
-async function update_gold(num) {
-    const gold_label = document.getElementById('gold_stat');
-
+async function update_health(num){
+    const health_label = document.getElementById('health_stat');
+    const vital_fill = document.getElementById('health_bar');
+    const health_emoji = document.getElementById('health_emoji');
+    
     try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, {
-            action: 'gold',
-            amount: num
-        });
+        const data = await fetchData(currentURL, { action: 'health', amount: num});
 
-        // if there is a valid response
-        if (data.gold !== undefined) {
-            gold_label.textContent = `Gold: ${data.gold}`;
-        }
+        if (data.success) {
+            // Update health text
+            if (data.health !== undefined) {
+                health_label.textContent = `${data.health} / ${data.max_health}`;
+            }
+            
+            // Update health bar width with smooth transition
+            if (data.calculated_health !== undefined) {
+                vital_fill.style.width = `${data.calculated_health}%`;
+                
+                // Update emoji based on health percentage
+                let emoji = '😃';
+                if (data.calculated_health == 0) {
+                    emoji = '😵';
+                } else if (data.calculated_health <= 30) {
+                    emoji = '🤕';
+                } else if (data.calculated_health <= 60) {
+                    emoji = '🫤';
+                } else if (data.calculated_health <= 90) {
+                    emoji = '🙂';
+                }
+                
+                health_emoji.innerHTML = `${emoji} Health`;
+            }
+        } 
     } catch (error) {
-        alert('Failed to update gold: ' + error.message);
+        alert('Failed to update health: ' + error.message);
     }
-};
-
-async function update_dark_stone(num) {
-    const dark_stone_label = document.getElementById('dark_stone_stat');
-
-    try {
-        // send data into the back end and get the response
-        const data = await fetchData(currentURL, {
-            action: 'dark_stone',
-            amount: num
-        });
-
-        // if there is a valid response
-        if (data.dark_stone !== undefined) {
-            dark_stone_label.textContent = `Dark Stone: ${data.dark_stone}`;
-        }
-    } catch (error) {
-        alert('Failed to update Dark Stone: ' + error.message);
-    }
-};
-
-async function update_xp(num) {
-    const xp_label = document.getElementById('xp_stat');
-
-    try {
-        const data = await fetchData(currentURL, {
-            action: 'xp',
-            amount: num
-        });
-
-        if (data.xp !== undefined) {
-            xp_label.textContent = `XP: ${data.xp}`;
-        }
-    } catch (error) {
-        alert('Failed to update XP: ' + error.message);
-    }
-};
-
-
-function resizeText(el, maxSize, minSize, scale = 0.6) {
-    const length = el.textContent.trim().length;
-
-    // Calculate size based on text length
-    let size = maxSize - length * scale;
-
-    // Clamp size
-    size = Math.max(minSize, Math.min(maxSize, size));
-
-    el.style.fontSize = size + "px";
 }
 
-function resizeAllTokens() {
-    document.querySelectorAll(".token_card h1").forEach(h1 => {
-        resizeText(h1, 32, 25, 0.7);
-    });
 
-    document.querySelectorAll(".token_card p").forEach(p => {
-        resizeText(p, 30, 25, 0.4);
-    });
+async function update_sanity(num) {
+    const sanity_stats = document.getElementById('sanity_stats')
+    const satiny_bar = document.getElementById('sanity_bar')
+    const sanity_emoji = document.getElementById('sanity_emoji')
+
+    try {
+        const data = await fetchData(currentURL, { action: 'sanity', amount: num});
+
+        if (data.success) {
+            // Update sanity text
+            if (data.sanity !== undefined) {
+                sanity_stats.textContent = `${data.sanity} / ${data.max_sanity}`;
+            }
+            
+            // Update health bar width with smooth transition
+            if (data.calculated_sanity !== undefined) {
+                sanity_bar.style.width = `${data.calculated_sanity}%`;
+
+
+                // Update emoji based on sanity percentage
+                let emoji = '😃';
+                if (data.calculated_sanity == 0) {
+                    emoji = '😱';
+                } else if (data.calculated_sanity <= 30) {
+                    emoji = '😨';
+                } else if (data.calculated_sanity <= 60) {
+                    emoji = '😧';
+                } else if (data.calculated_sanity <= 90) {
+                    emoji = '😐️';
+                }
+                sanity_emoji.innerHTML = `${emoji} Sanity`;
+            }
+        } 
+    } catch (error) {
+        alert('Failed to update Sanity: ' + error.message);
+    }
 }
-
 
 </script>
 {% endblock content %}

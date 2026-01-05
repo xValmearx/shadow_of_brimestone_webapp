@@ -207,12 +207,16 @@ class CharacterSheet(models.Model):
     # mental health
     max_sanity = models.IntegerField(default=0)
     sanity = models.IntegerField(default=0)
+    calculated_sanity = models.FloatField(default=0)
+
     will_power = models.IntegerField(default=0)
     spirit_armor = models.IntegerField(default=0)
 
-    # horror
-    max_horror = models.IntegerField(default=0)
-    horror = models.IntegerField(default=0)
+    # corruption
+    max_corruption = models.IntegerField(default=0)
+    corruption = models.IntegerField(default=0)
+    calculated_corruption = models.FloatField(default=0)
+
     corruption_resistance = models.IntegerField(default=0)
 
     # resources
@@ -273,14 +277,14 @@ class CharacterSheet(models.Model):
         self.sanity += amount
         self.save()
 
-    def update_horror(self, amount):
+    def update_corruption(self, amount):
 
-        if (self.horror + amount) > self.max_horror:
+        if (self.corruption + amount) > self.max_corruption:
             return
-        elif (self.horror + amount) < 0:
+        elif (self.corruption + amount) < 0:
             return
 
-        self.horror += amount
+        self.corruption += amount
         self.save()
 
     def update_grit(self, amount):
@@ -307,6 +311,14 @@ class CharacterSheet(models.Model):
 
     def calc_health(self):
         self.calculated_health = (self.health / self.max_health) * 100
+        self.save()
+
+    def calc_sanity(self):
+        self.calculated_sanity = (self.sanity / self.max_sanity) * 100
+        self.save()
+
+    def calc_corruption(self):
+        self.calculated_corruption = (self.corruption / self.max_corruption) * 100
         self.save()
 
     def __str__(self):

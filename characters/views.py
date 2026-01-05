@@ -98,7 +98,8 @@ class CharacterDetailView(DetailView):
 
             # the characters has a method to cycle to a new ability and return the new ability data
             # this cycle abiltiy also saves the ability state in the database as well
-            # so if they user logges back in, current select ability will still be there
+            # so if they user logges back in, the current ability will still be there
+            
             new_ability = self.object.cycle_ability()
             
             # Handle case where there are no abilities
@@ -120,19 +121,25 @@ class CharacterDetailView(DetailView):
         if action == 'health':
             amount = int(request.POST.get('amount'))
             self.object.update_health(amount)
-
+            self.object.calc_health()
+            
             return JsonResponse({
+                "success": True,
                 "health": self.object.health,
                 "max_health": self.object.max_health,
-            })
+                "calculated_health": self.object.calculated_health
+    })
         
         if action == 'sanity':
             amount = int(request.POST.get('amount'))
             self.object.update_sanity(amount)
+            self.object.calc_sanity()
 
             return JsonResponse({
+                'success':True,
                 "sanity": self.object.sanity,
                 "max_sanity": self.object.max_sanity,
+                "calculated_sanity": self.object.calculated_sanity
             })
         
         if action == 'horror':
@@ -176,15 +183,6 @@ class CharacterDetailView(DetailView):
             return JsonResponse({
                 "xp": self.object.xp,
             })
-
-        if action == "delete_token":
-            char_token_pk = request.POST.get("char_token_pk")
-            char_token = get_object_or_404(CharacterToken, pk=char_token_pk, character=self.object)
-            char_token.delete()
-
-            # Render only the cards (inner HTML)
-            html = render_to_string('characters/_token_list.html', {'character': self.object})
-            return JsonResponse({"success": True, "html": html})
 
         
     

@@ -1,0 +1,39 @@
+                <div class="vital-label">
+                    {% if character.calculated_health == 0 %}
+                        😵
+                    {% elif character.calculated_health <= 30 %}
+                        🤕
+                    {% elif character.calculated_health <= 60 %}
+                        🫤
+                    {% elif character.calculated_health <= 90 %}
+                        🙂
+                    {% else %}
+                        😃
+                    {% endif %}
+                    Health</div>
+                <div class="vital-label">🛡️ Armor: <span style="font-size: 1.2em;">{{character.armor}}</span></div>
+                <div class="vital-bar">
+                    <div class="vital-fill" id = "health_bar" style="width:{{character.calculated_health}}%"></div>
+                    <div class="vital-text" id="health_stat">{{character.health}} / {{character.max_health}}</div>
+                </div>
+
+                <!-- Left button (decrease health) -->
+                <button class="health-btn health-btn-left" onclick="update_health(-1)">−</button>
+                
+                <!-- Right button (increase health) -->
+                <button class="health-btn health-btn-right" onclick="update_health(1)">+</button>
+
+
+<script>
+    async function update_health(num){
+    try {
+        const data = await fetchData(currentURL, { action: 'health', amount: num});
+
+        if (data.success && data.html) {
+            document.getElementById('health-card').innerHTML = data.html;
+        } 
+    } catch (error) {
+        alert('Failed to update health: ' + error.message);
+    }
+}
+</script>
